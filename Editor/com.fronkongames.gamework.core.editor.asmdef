@@ -1,0 +1,16 @@
+﻿{
+  "name": "com.fronkongames.gamework.core.editor",
+  "references":
+  [
+    "com.fronkongames.gamework.core",
+    "com.fronkongames.gamework.foundation.editor"
+  ],
+  "optionalUnityReferences": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": []
+}

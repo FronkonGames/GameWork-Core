@@ -1,0 +1,15 @@
+﻿{
+  "name": "com.fronkongames.gamework.core",
+  "references":
+  [
+    "com.fronkongames.gamework.foundation"
+  ],
+  "optionalUnityReferences": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": []
+}
