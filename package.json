@@ -1,0 +1,31 @@
+{
+  "name": "com.frokongames.gamework.core",
+  "version": "0.0.1",
+  "displayName": "Game:Work Core",
+  "decription": "A modular framework with dependency injection.",
+  "references": [ ],
+  "unity": "2020.3",
+  "unityRelease": "26f1",
+  "optionalUnityReferences": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "dependencies":  {  },
+  "keywords": [ "unity", "gamedev", "framework", "game development" ],
+  "category": "Unity",
+  "repository":
+  {
+    "type": "git",
+    "url": "git+https://github.com/FronkonGames/GameWork-Core.git"
+  },  
+  "author":
+  {
+    "name": "Martin Bustos",
+    "email": "fronkongames@gmail.com",
+    "url": "https://fronkongames.github.io/"
+  }
+}
