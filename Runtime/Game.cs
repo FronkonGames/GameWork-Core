@@ -14,7 +14,6 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using UnityEngine;
 using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
@@ -93,8 +92,9 @@ namespace FronkonGames.GameWork.Core
     /// <summary>
     /// Callback sent to all game objects before the application is quit.
     /// </summary>
-    private void OnApplicationQuit()
+    protected override void OnApplicationQuit()
     {
+      base.OnApplicationQuit();
     }
 
 #if UNITY_ANDROID || UNITY_IOS
