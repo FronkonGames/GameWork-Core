@@ -15,15 +15,16 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// 
+  /// .
   /// </summary>
-  public abstract class Game : MonoBehaviourSingleton<BaseMonoBehaviour>,
+  public abstract class Game : MonoBehaviourSingleton<Game>,
                                IInitializable,
                                IUpdatable,
                                IDestructible
@@ -46,12 +47,16 @@ namespace FronkonGames.GameWork.Core
     /// <value>True si va a destruirse.</value>
     public bool WillDestroy { get; set; }
 
+    [SerializeField]
+    private List<ScriptableModule> modules = new List<ScriptableModule>();
+
     private readonly FastList<IInitializable> initializables = new FastList<IInitializable>();
     private readonly FastList<IActivable> activables = new FastList<IActivable>();
     private readonly FastList<IUpdatable> updatables = new FastList<IUpdatable>();
     private readonly FastList<IGUI> GUIables = new FastList<IGUI>();
     private readonly FastList<IRenderObject> renderableObjects = new FastList<IRenderObject>();
     private readonly FastList<IDestructible> destructibles = new FastList<IDestructible>();
+    private readonly FastList<IBeforeSceneLoad> beforeSceneLoad = new FastList<IBeforeSceneLoad>();
 #if UNITY_ANDROID || UNITY_IOS
     private readonly FastList<ILowMemory> lowMemories = new FastList<ILowMemory>();
 #endif
@@ -94,41 +99,38 @@ namespace FronkonGames.GameWork.Core
     public virtual void OnWillDestroy() { }
 
     /// <summary>
-    /// Returns a module.
+    /// Register modules. Only allowed in OnInitialize.
     /// </summary>
-    /// <typeparam name="T">Type of module.</typeparam>
-    /// <returns>Module o null</returns>
-    public T GetModule<T>() where T : IModule, new()
+    /// <param name="modules">Listado de modulos.</param>
+    public void RegisterModule(params IModule[] modules)
     {
-      Type typeOf = typeof(T);
+      if (Initialized == true)
+        Log.Exception("Cannot to registered outsize of OnInitialize cycle");
 
-      for (int i = 0; i < allModules.Count; ++i)
-      {
-        if (allModules[i].GetType() == typeOf)
-          return (T)allModules[i];
-      }
-
-      Log.Exception($"Unable to get '{typeOf}', it was not registerd");
-
-      return default(T);
+      for (int i = 0; i < modules.Length; ++i)
+        RegisterModule(modules[i], modules[i].GetType());
     }
 
     /// <summary>
-    /// Returns a module.
+    /// Register modules by type and create them.
     /// </summary>
-    /// <typeparam name="T">Type of module.</typeparam>
-    /// <returns>Module o null</returns>
-    public IModule GetModule(Type typeOf)
+    /// <param name="types">Tipos de modulos.</param>
+    public void RegisterModule(params Type[] types)
     {
-      for (int i = 0; i < allModules.Count; ++i)
+      if (Initialized == true)
+        Log.Exception("Cannot to registered outsize of OnInitialize cycle");
+
+      for (int i = 0; i < types.Length; ++i)
       {
-        if (allModules[i].GetType() == typeOf)
-          return allModules[i];
+        if (typeof(IModule).IsAssignableFrom(types[i]) == true)
+        {
+          IModule piece = Activator.CreateInstance(types[i]) as IModule;
+          if (piece != null)
+            RegisterModule(piece, types[i]);
+          else
+            Log.Error($"'{types[i]}' not register to the Game.");
+        }
       }
-
-      Log.Exception($"Unable to get '{typeOf}', it was not registerd");
-
-      return null;
     }
 
     /// <summary>
@@ -136,16 +138,50 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     /// <typeparam name="T">Type of module.</typeparam>
     /// <returns>True if you are registered.</returns>
-    public bool HasModule<T>() where T : IModule, new()
+    public bool HasModule<T>() where T : IModule
     {
-      Type typeOfS = typeof(T);
       for (int i = 0; i < allModules.Count; ++i)
       {
-        if (this.allModules[i].GetType() == typeOfS)
+        if (allModules[i] is T)
           return true;
       }
 
       return false;
+    }
+
+    /// <summary>
+    /// Returns the first module of a type (or null).
+    /// </summary>
+    /// <typeparam name="T">Module type</typeparam>
+    /// <returns>Module or null</returns>
+    public T GetModule<T>() where T : IModule
+    {
+      for (int i = 0; i < allModules.Count; ++i)
+      {
+        if (allModules[i] is T)
+          return (T)allModules[i];
+      }
+
+      Log.Error($"Module {typeof(T).Name} not register");
+
+      return default(T);
+    }
+
+    /// <summary>
+    /// Returns all modules of a type (or empty).
+    /// </summary>
+    /// <typeparam name="T">Module type</typeparam>
+    /// <returns>List of modules</returns>
+    public List<T> GetModules<T>() where T : IModule
+    {
+      List<T> modules = new List<T>();
+      for (int i = 0; i < allModules.Count; ++i)
+      {
+        if (allModules[i] is T)
+          modules.Add((T)allModules[i]);
+      }
+
+      return modules;
     }
 
     private void RegisterModule(IModule module, Type type)
@@ -168,20 +204,18 @@ namespace FronkonGames.GameWork.Core
       if (typeof(IDestructible).IsAssignableFrom(type) == true)
         destructibles.Add(module as IDestructible);
 
+      if (typeof(IBeforeSceneLoad).IsAssignableFrom(type) == true)
+        beforeSceneLoad.Add(module as IBeforeSceneLoad);
+
 #if UNITY_ANDROID || UNITY_IOS
       if (typeof(ILowMemory).IsAssignableFrom(type) == true)
         lowMemories.Add(service as ILowMemory);
 #endif
 
       allModules.Add(module);
-
-      Log.Info($"'{type.ToString()}' registred");
     }
 
-    /// <summary>
-    /// During the awake, this system will start the initialization.
-    /// </summary>
-    private void Awake()
+    private void EntryPoint()
     {
       DontDestroyOnLoad(this.gameObject);
 
@@ -189,11 +223,25 @@ namespace FronkonGames.GameWork.Core
 #if UNITY_ANDROID || UNITY_IOS
       Application.lowMemory += OnLowMemory;
 #endif
-
       this.OnInitialize();
+
+      if (modules.Count > 0)
+        RegisterModule(modules.ToArray());
 
       for (int i = 0; i < initializables.Count; ++i)
         initializables[i].OnInitialize();
+    }
+
+    /// <summary>
+    /// During the awake, this system will start the initialization.
+    /// </summary>
+    private void Awake()
+    {
+    }
+
+    // This function is called when the object becomes enabled and active.
+    private void OnEnable()
+    {
     }
 
     /// <summary>
@@ -311,10 +359,10 @@ namespace FronkonGames.GameWork.Core
       GUIables.Clear();
       renderableObjects.Clear();
       destructibles.Clear();
+      beforeSceneLoad.Clear();
 #if UNITY_ANDROID || UNITY_IOS
       lowMemories.Clear();
 #endif
-
       allModules.Clear();
 
 #if UNITY_ANDROID || UNITY_IOS
@@ -346,10 +394,8 @@ namespace FronkonGames.GameWork.Core
     /// <summary>
     /// Callback sent to all game objects before the application is quit.
     /// </summary>
-    protected override void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
-      base.OnApplicationQuit();
-
       this.WillDestroy = true;
 
       for (int i = 0; i < destructibles.Count; ++i)
@@ -366,6 +412,20 @@ namespace FronkonGames.GameWork.Core
         lowMemories[i].OnLowMemory();
     }
 #endif
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void OnBeforeSceneLoad()
+    {
+      if (Game.Instance.HasModule<IBeforeSceneLoad>() == true)
+      {
+        List<IBeforeSceneLoad> beforeSceneLoad = Game.Instance.GetModules<IBeforeSceneLoad>();
+        for (int i = 0; i < beforeSceneLoad.Count; ++i)
+          beforeSceneLoad[i].OnBeforeSceneLoad();
+      }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+    private static void OnBeforeSplashScreen() => Game.Instance.EntryPoint();
 
     private bool OnWantsToQuit()
     {
