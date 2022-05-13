@@ -59,6 +59,9 @@ namespace FronkonGames.GameWork.Core
 #endif
     private readonly FastList<IModule> allModules = new FastList<IModule>();
 
+    public CallbackTask NextUpdate { get; set; }
+    public CallbackTask NextFixedUpdate { get; set; }
+
     /// <summary>
     /// On initialize.
     /// </summary>
@@ -301,6 +304,13 @@ namespace FronkonGames.GameWork.Core
             updatables[i].OnUpdate();
         }
       }
+
+      if (NextUpdate != null)
+      {
+        CallbackAwaiter awaiter = NextUpdate.Awaiter;
+        NextUpdate = null;
+        awaiter.Complete();
+      }      
     }
 
     /// <summary>
@@ -318,6 +328,13 @@ namespace FronkonGames.GameWork.Core
             updatables[i].OnFixedUpdate();
         }
       }
+
+      if (NextFixedUpdate != null)
+      {
+        CallbackAwaiter awaiter = NextFixedUpdate.Awaiter;
+        NextFixedUpdate = null;
+        awaiter.Complete();
+      }      
     }
 
     /// <summary>
