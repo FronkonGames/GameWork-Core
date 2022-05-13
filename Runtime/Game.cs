@@ -47,9 +47,6 @@ namespace FronkonGames.GameWork.Core
     /// <value>True si va a destruirse.</value>
     public bool WillDestroy { get; set; }
 
-    [SerializeField]
-    private List<ScriptableModule> modules = new List<ScriptableModule>();
-
     private readonly FastList<IInitializable> initializables = new FastList<IInitializable>();
     private readonly FastList<IActivable> activables = new FastList<IActivable>();
     private readonly FastList<IUpdatable> updatables = new FastList<IUpdatable>();
@@ -124,12 +121,22 @@ namespace FronkonGames.GameWork.Core
       {
         if (typeof(IModule).IsAssignableFrom(types[i]) == true)
         {
-          IModule piece = Activator.CreateInstance(types[i]) as IModule;
-          if (piece != null)
-            RegisterModule(piece, types[i]);
+          IModule module = null;
+          if (typeof(MonoBehaviourModule).IsAssignableFrom(types[i]) == false)
+            module = Activator.CreateInstance(types[i]) as IModule;
           else
-            Log.Error($"'{types[i]}' not register to the Game.");
+          {
+            GameObject gameObject = new GameObject(types[i].Name);
+            module = gameObject.AddComponent(types[i]) as IModule;
+          }
+
+          if (module != null)
+            RegisterModule(module, types[i]);
+          else
+            Log.Error($"'{types[i]}' null, not register to the Game");
         }
+        else
+          Log.Error($"'{types[i]}' unknown, not register to the Game");
       }
     }
 
@@ -187,7 +194,12 @@ namespace FronkonGames.GameWork.Core
     private void RegisterModule(IModule module, Type type)
     {
       if (typeof(IInitializable).IsAssignableFrom(type) == true)
-        initializables.Add(module as IInitializable);
+      {
+        IInitializable initializable = module as IInitializable;
+        initializables.Add(initializable);
+
+        initializable.OnInitialize();
+      }
 
       if (typeof(IActivable).IsAssignableFrom(type) == true)
         activables.Add(module as IActivable);
@@ -224,12 +236,6 @@ namespace FronkonGames.GameWork.Core
       Application.lowMemory += OnLowMemory;
 #endif
       this.OnInitialize();
-
-      if (modules.Count > 0)
-        RegisterModule(modules.ToArray());
-
-      for (int i = 0; i < initializables.Count; ++i)
-        initializables[i].OnInitialize();
     }
 
     /// <summary>
@@ -274,8 +280,11 @@ namespace FronkonGames.GameWork.Core
       {
         this.Initialized = true;
         this.OnInitialized();
+      }
 
-        for (int i = 0; i < initializables.Count; ++i)
+      for (int i = 0; i < initializables.Count; ++i)
+      {
+        if (initializables[i].Initialized == false)
         {
           initializables[i].Initialized = true;
           initializables[i].OnInitialized();
