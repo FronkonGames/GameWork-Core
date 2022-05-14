@@ -442,7 +442,7 @@ namespace FronkonGames.GameWork.Core
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnBeforeSceneLoad()
     {
-      if (Game.Instance.HasModule<IBeforeSceneLoad>() == true)
+      if (Game.IsCreated == true && Game.Instance.HasModule<IBeforeSceneLoad>() == true)
       {
         List<IBeforeSceneLoad> beforeSceneLoad = Game.Instance.GetModules<IBeforeSceneLoad>();
         for (int i = 0; i < beforeSceneLoad.Count; ++i)
