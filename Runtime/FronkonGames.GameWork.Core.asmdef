@@ -1,8 +1,8 @@
 ﻿{
-  "name": "com.fronkongames.gamework.core",
+  "name": "FronkonGames.GameWork.Core",
   "references":
   [
-    "com.fronkongames.gamework.foundation"
+    "FronkonGames.GameWork.Foundation"
   ],
   "optionalUnityReferences": [],
   "includePlatforms": [],
