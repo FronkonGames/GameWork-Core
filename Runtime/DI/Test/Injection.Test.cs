@@ -24,16 +24,18 @@ using FronkonGames.GameWork.Core;
 /// </summary>
 public partial class InjectionTests
 {
-  public class TestA
-  {
-  }
+  public class ClassA { }
+  public class ClassB { }
 
   public class TestInjection
   {
-    public TestA TestA { get { return testA; } }
+    public ClassA ClassA { get { return testA; } }
 
-    [Inject(InjectType.Registered)]
-    private TestA testA;
+    [Inject]
+    public ClassB ClassB { get; set; }
+
+    [Inject]
+    private ClassA testA;
   }
 
   /// <summary>
@@ -45,13 +47,15 @@ public partial class InjectionTests
     DependencyContainer dependencyContainer = new DependencyContainer();
 
     TestInjection testInjection = new TestInjection();
-    TestA testA = new TestA();
 
-    dependencyContainer.Register(testA);
+    ClassA classA = new ClassA();
+    ClassB classB = new ClassB();
+    dependencyContainer.Register(classA, classB);
 
     Injector.Resolve(testInjection, dependencyContainer);
 
-    Assert.NotNull(testInjection.TestA);
+    Assert.NotNull(testInjection.ClassA);
+    Assert.NotNull(testInjection.ClassB);
 
     yield return null;
   }

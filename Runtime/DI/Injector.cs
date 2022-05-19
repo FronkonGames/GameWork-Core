@@ -31,9 +31,15 @@ namespace FronkonGames.GameWork.Core
     /// <param name="target">Target.</param>
     public static void Resolve(Object target, DependencyContainer container)
     {
+      // Variables.
       FieldInfo[] fieldInfos = target.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
       for (int i = 0; i < fieldInfos.Length; ++i)
         InjectField(target, container, fieldInfos[i]);
+
+      // Properties.
+      PropertyInfo[] propertyInfos = target.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+      for (int i = 0; i < propertyInfos.Length; ++i)
+        InjectProperty(target, container, propertyInfos[i]);
     }
 
     private static void InjectField(object target, DependencyContainer container, FieldInfo fieldInfo)
@@ -44,7 +50,19 @@ namespace FronkonGames.GameWork.Core
         if (container.Contains(fieldInfo.FieldType) == true)
           fieldInfo.SetValue(target, container.Get(fieldInfo.FieldType));
         else
-          Log.Error($"Type '{fieldInfo.FieldType}' not register");
+          Log.Error($"Type '{fieldInfo.FieldType}' not registered");
+      }
+    }
+
+    private static void InjectProperty(object target, DependencyContainer container, PropertyInfo propertyInfo)
+    {
+      InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
+      if (injectAttribute != null)
+      {
+        if (container.Contains(propertyInfo.PropertyType) == true)
+          propertyInfo.SetValue(target, container.Get(propertyInfo.PropertyType));
+        else
+          Log.Error($"Type '{propertyInfo.PropertyType}' not registered");
       }
     }
   }

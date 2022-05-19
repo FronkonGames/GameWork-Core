@@ -27,9 +27,6 @@ namespace FronkonGames.GameWork.Core
   {
     public readonly InjectType injectType = InjectType.Registered;
 
-    public InjectAttribute(InjectType injectType = InjectType.Registered)
-    {
-      this.injectType = injectType;
-    }
+    public InjectAttribute(InjectType injectType = InjectType.Registered) => this.injectType = injectType;
   }
 }

@@ -21,31 +21,24 @@ using FronkonGames.GameWork.Foundation;
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// .
+  /// Dependency container.
   /// </summary>
   public sealed class DependencyContainer
   {
     private Dictionary<Type, object> container = new Dictionary<Type, object>();
 
-    public bool Contains<T>() where T : class => container.ContainsKey(typeof(T));
-
-    public bool Contains(object obj) => container.ContainsKey(obj.GetType());
-
+    /// <summary>
+    /// The tipo is registered?
+    /// </summary>
+    /// <param name="type">Type</param>
+    /// <returns>true/false</returns>
     public bool Contains(Type type) => container.ContainsKey(type);
 
-    public T Get<T>() where T : class
-    {
-      T obj = null;
-
-      Type type = typeof(T);
-      if (container.ContainsKey(type) == true)
-        obj = container[type] as T;
-      else
-        Log.Error($"Object '{type}' not found");
-
-      return obj;
-    }
-
+    /// <summary>
+    /// Return the object, if the type is registered.
+    /// </summary>
+    /// <param name="type">Type</param>
+    /// <returns>Object or null</returns>
     public object Get(Type type)
     {
       object obj = null;
@@ -57,6 +50,20 @@ namespace FronkonGames.GameWork.Core
       return obj;
     }
 
+    /// <summary>
+    /// Record the types of objects.
+    /// </summary>
+    /// <param name="objs">Objects</param>
+    public void Register(params object[] objs)
+    {
+      for (int i = 0; i < objs.Length; ++i)
+        Register(objs[i]);
+    }
+
+    /// <summary>
+    /// Record the type of the object.
+    /// </summary>
+    /// <param name="obj">Object</param>
     public void Register(object obj)
     {
       Type type = obj.GetType();
@@ -67,10 +74,10 @@ namespace FronkonGames.GameWork.Core
         Log.Error($"Object '{type}' is already added");
     }
 
-    public void Remove<T>() where T : class => Remove(typeof(T));
-
-    public void Remove(object obj) => Remove(obj.GetType());
-
+    /// <summary>
+    /// Remove a type from the register.
+    /// </summary>
+    /// <param name="type">Type</param>
     public void Remove(Type type)
     {
       if (container.ContainsKey(type) == true)
@@ -79,6 +86,9 @@ namespace FronkonGames.GameWork.Core
         Log.Error($"Object '{type}' not found");
     }
 
+    /// <summary>
+    /// Eliminate all types from the register.
+    /// </summary>
     public void Clear() => container.Clear();
   }
 }
