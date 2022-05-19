@@ -29,7 +29,7 @@ namespace FronkonGames.GameWork.Core
     /// Look for 'Inject' attributes and injects available objects in the container.
     /// </summary>
     /// <param name="target">Target.</param>
-    public static void Resolve(Object target, DependencyContainer container)
+    public static void Resolve(Object target, IDependencyContainer container)
     {
       // Variables.
       FieldInfo[] fieldInfos = target.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -42,7 +42,7 @@ namespace FronkonGames.GameWork.Core
         InjectProperty(target, container, propertyInfos[i]);
     }
 
-    private static void InjectField(object target, DependencyContainer container, FieldInfo fieldInfo)
+    private static void InjectField(object target, IDependencyContainer container, FieldInfo fieldInfo)
     {
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
@@ -54,7 +54,7 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    private static void InjectProperty(object target, DependencyContainer container, PropertyInfo propertyInfo)
+    private static void InjectProperty(object target, IDependencyContainer container, PropertyInfo propertyInfo)
     {
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
