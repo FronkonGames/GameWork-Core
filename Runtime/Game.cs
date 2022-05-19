@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
@@ -62,7 +63,8 @@ namespace FronkonGames.GameWork.Core
 #endif
     private readonly FastList<IModule> allModules = new FastList<IModule>();
 
-    private readonly DependencyContainer dependencyContainer = new DependencyContainer();
+    protected Injector injector;
+    protected DependencyContainer dependencyContainer;
 
     /// <summary>
     /// On initialize.
@@ -236,10 +238,14 @@ namespace FronkonGames.GameWork.Core
     {
       DontDestroyOnLoad(this.gameObject);
 
+      dependencyContainer = new DependencyContainer();
+      injector = new Injector(dependencyContainer);
+
       Application.wantsToQuit += OnWantsToQuit;
 #if UNITY_ANDROID || UNITY_IOS
       Application.lowMemory += OnLowMemory;
 #endif
+
       this.OnInitialize();
     }
 
@@ -446,20 +452,40 @@ namespace FronkonGames.GameWork.Core
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     private static void OnBeforeSplashScreen() => Game.Instance.EntryPoint();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void OnBeforeSceneLoad()
+    private void OnBeforeSceneLoad()
     {
-      if (Game.IsCreated == true && Game.Instance.HasModule<IBeforeSceneLoad>() == true)
-      {
-        List<IBeforeSceneLoad> beforeSceneLoad = Game.Instance.GetModules<IBeforeSceneLoad>();
-        for (int i = 0; i < beforeSceneLoad.Count; ++i)
-          beforeSceneLoad[i].OnBeforeSceneLoad();
-      }
+      for (int i = 0; i < beforeSceneLoad.Count; ++i)
+        beforeSceneLoad[i].OnBeforeSceneLoad();
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void BeforeSceneLoad()
+    {
+      if (Game.IsCreated == true)
+        Game.Instance.OnBeforeSceneLoad();
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void OnAfterSceneLoad()
+    private static void AfterSceneLoad()
     {
+      if (Game.IsCreated == true)
+        Game.Instance.OnAfterSceneLoad();
+    }
+
+    private void OnAfterSceneLoad()
+    {
+      // @TODO: Test LINQ performance.
+      //var baseComponents = SceneManager.GetActiveScene().GetRootGameObjects().SelectMany(gameObject => gameObject.GetComponentsInChildren<BaseMonoBehaviour>()).ToList();      
+
+      GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+      for (int i = 0; i < gameObjects.Length; ++i)
+      {
+        List<BaseMonoBehaviour> allBaseMonoBehaviours = new List<BaseMonoBehaviour>(gameObjects[i].GetComponents<BaseMonoBehaviour>());
+        allBaseMonoBehaviours.AddRange(gameObjects[i].GetComponentsInChildren<BaseMonoBehaviour>());
+
+        for (int j = 0; j < allBaseMonoBehaviours.Count; ++j)
+          injector.Resolve(allBaseMonoBehaviours[j]);
+      }
     }
 
     private bool OnWantsToQuit()

@@ -23,34 +23,46 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// Dependencies injector.
   /// </summary>
-  public static class Injector
+  public sealed class Injector : IInjector
   {
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="container">Dependency container</param>
+    public Injector(IDependencyContainer container) => Container = container;
+
+    /// <summary>
+    /// Dependencies container used.
+    /// </summary>
+    /// <value></value>
+    public IDependencyContainer Container { get; set; }
+
     /// <summary>
     /// Look for 'Inject' attributes and injects available objects in the container.
     /// </summary>
     /// <param name="target">Target.</param>
-    public static void Resolve(object target, IDependencyContainer container)
+    public void Resolve(object target)
     {
       // Variables.
       FieldInfo[] fieldInfos = target.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
       for (int i = 0; i < fieldInfos.Length; ++i)
-        InjectField(target, container, fieldInfos[i]);
+        InjectField(target, fieldInfos[i]);
 
       // Properties.
       PropertyInfo[] propertyInfos = target.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
       for (int i = 0; i < propertyInfos.Length; ++i)
-        InjectProperty(target, container, propertyInfos[i]);
+        InjectProperty(target, propertyInfos[i]);
     }
 
-    private static void InjectField(object target, IDependencyContainer container, FieldInfo fieldInfo)
+    private void InjectField(object target, FieldInfo fieldInfo)
     {
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
         if (injectAttribute.mode == SearchIn.Container)
         {
-          if (container.Contains(fieldInfo.FieldType) == true)
-            fieldInfo.SetValue(target, container.Get(fieldInfo.FieldType));
+          if (Container.Contains(fieldInfo.FieldType) == true)
+            fieldInfo.SetValue(target, Container.Get(fieldInfo.FieldType));
           else
             Log.Error($"Type '{fieldInfo.FieldType}' not registered");
         }
@@ -76,13 +88,13 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    private static void InjectProperty(object target, IDependencyContainer container, PropertyInfo propertyInfo)
+    private void InjectProperty(object target, PropertyInfo propertyInfo)
     {
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null && injectAttribute.mode == SearchIn.Container)
       {
-        if (container.Contains(propertyInfo.PropertyType) == true)
-          propertyInfo.SetValue(target, container.Get(propertyInfo.PropertyType));
+        if (Container.Contains(propertyInfo.PropertyType) == true)
+          propertyInfo.SetValue(target, Container.Get(propertyInfo.PropertyType));
         else
           Log.Error($"Type '{propertyInfo.PropertyType}' not registered");
       }

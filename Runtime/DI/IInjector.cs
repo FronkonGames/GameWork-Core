@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) Martin Bustos @FronkonGames <fronkongames@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -14,49 +14,24 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System.Collections;
-using NUnit.Framework;
-using UnityEngine.TestTools;
-using FronkonGames.GameWork.Core;
 
-/// <summary>
-/// Injection test.
-/// </summary>
-public partial class InjectionTests
+namespace FronkonGames.GameWork.Core
 {
-  public class ClassA { }
-  public class ClassB { }
-
-  public class TestInjection
-  {
-    public ClassA ClassA { get { return testA; } }
-
-    [Inject]
-    public ClassB ClassB { get; set; }
-
-    [Inject]
-    private ClassA testA;
-  }
-
   /// <summary>
-  /// Injection test.
+  /// Injector interface.
   /// </summary>
-  [UnityTest]
-  public IEnumerator Injection()
+  public interface IInjector
   {
-    Injector injector = new Injector(new DependencyContainer());
+    /// <summary>
+    /// Dependencies container used.
+    /// </summary>
+    /// <value></value>
+    IDependencyContainer Container { get; set; }
 
-    TestInjection testInjection = new TestInjection();
-
-    ClassA classA = new ClassA();
-    ClassB classB = new ClassB();
-    injector.Container.Register(classA, classB);
-
-    injector.Resolve(testInjection);
-
-    Assert.NotNull(testInjection.ClassA);
-    Assert.NotNull(testInjection.ClassB);
-
-    yield return null;
+    /// <summary>
+    /// Look for 'Inject' attributes and injects available objects in the container.
+    /// </summary>
+    /// <param name="target">Target.</param>
+    void Resolve(object target);
   }
 }
