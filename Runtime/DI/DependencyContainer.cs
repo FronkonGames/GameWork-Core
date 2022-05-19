@@ -28,7 +28,7 @@ namespace FronkonGames.GameWork.Core
     private Dictionary<Type, object> container = new Dictionary<Type, object>();
 
     /// <summary>
-    /// The tipo is registered?
+    /// The type is registered?
     /// </summary>
     /// <param name="type">Type</param>
     /// <returns>true/false</returns>
@@ -41,10 +41,8 @@ namespace FronkonGames.GameWork.Core
     /// <returns>Object or null</returns>
     public object Get(Type type)
     {
-      object obj = null;
-      if (container.ContainsKey(type) == true)
-        obj = container[type];
-      else
+      object obj = container.ContainsKey(type) == true ? container[type] : null;
+      if (obj == null)
         Log.Error($"Object '{type}' not found");
 
       return obj;

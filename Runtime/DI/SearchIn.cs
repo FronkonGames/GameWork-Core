@@ -18,14 +18,20 @@
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// Injection types.
+  /// Dependencies search modes.
   /// </summary>
-  public enum InjectType
+  public enum SearchIn
   {
-    Registered,
+    ///<summary>Find dependencies registered in a container.</summary>
+    Container,
 
-    ComponentInParent,
+    ///<summary>Find dependencies at the Components. Only available for BaseMonoBehaviour.</summary>
+    Components,
 
-    ComponentInChildren,
+    ///<summary>Find dependencies at the parent. Only available for BaseMonoBehaviour.</summary>
+    Parent,
+
+    ///<summary>Find dependencies at the childrens. Only available for BaseMonoBehaviour.</summary>
+    Childrens,
   }
 }

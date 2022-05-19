@@ -15,8 +15,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using System.Collections.Generic;
-using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
@@ -26,7 +24,7 @@ namespace FronkonGames.GameWork.Core
   public interface IDependencyContainer
   {
     /// <summary>
-    /// The tipo is registered?
+    /// The type is registered?
     /// </summary>
     /// <param name="type">Type</param>
     /// <returns>true/false</returns>

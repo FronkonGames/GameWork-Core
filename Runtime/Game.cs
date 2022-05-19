@@ -47,6 +47,9 @@ namespace FronkonGames.GameWork.Core
     /// <value>True si va a destruirse.</value>
     public bool WillDestroy { get; set; }
 
+    public CallbackTask NextUpdate { get; set; }
+    public CallbackTask NextFixedUpdate { get; set; }
+
     private readonly FastList<IInitializable> initializables = new FastList<IInitializable>();
     private readonly FastList<IActivable> activables = new FastList<IActivable>();
     private readonly FastList<IUpdatable> updatables = new FastList<IUpdatable>();
@@ -59,8 +62,7 @@ namespace FronkonGames.GameWork.Core
 #endif
     private readonly FastList<IModule> allModules = new FastList<IModule>();
 
-    public CallbackTask NextUpdate { get; set; }
-    public CallbackTask NextFixedUpdate { get; set; }
+    private readonly DependencyContainer dependencyContainer = new DependencyContainer();
 
     /// <summary>
     /// On initialize.
@@ -391,6 +393,8 @@ namespace FronkonGames.GameWork.Core
 #endif
       allModules.Clear();
 
+      dependencyContainer.Clear();
+
 #if UNITY_ANDROID || UNITY_IOS
       Application.lowMemory -= OnLowMemory;
 #endif
@@ -439,6 +443,9 @@ namespace FronkonGames.GameWork.Core
     }
 #endif
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+    private static void OnBeforeSplashScreen() => Game.Instance.EntryPoint();
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnBeforeSceneLoad()
     {
@@ -450,8 +457,10 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-    private static void OnBeforeSplashScreen() => Game.Instance.EntryPoint();
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void OnAfterSceneLoad()
+    {
+    }
 
     private bool OnWantsToQuit()
     {

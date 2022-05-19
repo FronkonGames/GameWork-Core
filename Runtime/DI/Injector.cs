@@ -14,8 +14,8 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
 using System.Reflection;
+using UnityEngine;
 using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
@@ -29,7 +29,7 @@ namespace FronkonGames.GameWork.Core
     /// Look for 'Inject' attributes and injects available objects in the container.
     /// </summary>
     /// <param name="target">Target.</param>
-    public static void Resolve(Object target, IDependencyContainer container)
+    public static void Resolve(object target, IDependencyContainer container)
     {
       // Variables.
       FieldInfo[] fieldInfos = target.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -47,17 +47,39 @@ namespace FronkonGames.GameWork.Core
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
-        if (container.Contains(fieldInfo.FieldType) == true)
-          fieldInfo.SetValue(target, container.Get(fieldInfo.FieldType));
+        if (injectAttribute.mode == SearchIn.Container)
+        {
+          if (container.Contains(fieldInfo.FieldType) == true)
+            fieldInfo.SetValue(target, container.Get(fieldInfo.FieldType));
+          else
+            Log.Error($"Type '{fieldInfo.FieldType}' not registered");
+        }
         else
-          Log.Error($"Type '{fieldInfo.FieldType}' not registered");
+        {
+          BaseMonoBehaviour monoBehaviour = target as BaseMonoBehaviour;
+          if (monoBehaviour != null)
+          {
+            Component component = null;
+            if (injectAttribute.mode == SearchIn.Components)
+              component = monoBehaviour.GetComponent(fieldInfo.FieldType);
+            else if (injectAttribute.mode == SearchIn.Parent)
+              component = monoBehaviour.GetComponentInParent(fieldInfo.FieldType);
+            else if (injectAttribute.mode == SearchIn.Childrens)
+              component = monoBehaviour.GetComponentInChildren(fieldInfo.FieldType);
+
+            if (component != null)
+              fieldInfo.SetValue(target, component);
+          }
+          else
+            Log.Error($"'{target}' is not a BaseMonoBehaviour");
+        }
       }
     }
 
     private static void InjectProperty(object target, IDependencyContainer container, PropertyInfo propertyInfo)
     {
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
-      if (injectAttribute != null)
+      if (injectAttribute != null && injectAttribute.mode == SearchIn.Container)
       {
         if (container.Contains(propertyInfo.PropertyType) == true)
           propertyInfo.SetValue(target, container.Get(propertyInfo.PropertyType));
