@@ -68,8 +68,6 @@ namespace FronkonGames.GameWork.Core
 
       if (container.ContainsKey(type) == false)
         container.Add(type, obj);
-      else
-        Log.Error($"Object '{type}' is already added");
     }
 
     /// <summary>

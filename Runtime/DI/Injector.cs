@@ -14,6 +14,7 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using FronkonGames.GameWork.Foundation;
@@ -26,16 +27,33 @@ namespace FronkonGames.GameWork.Core
   public sealed class Injector : IInjector
   {
     /// <summary>
-    /// Constructor.
+    /// Add a dependencies container.
     /// </summary>
     /// <param name="container">Dependency container</param>
-    public Injector(IDependencyContainer container) => Container = container;
+    public void AddContainer(IDependencyContainer container)
+    {
+      if (containers.Contains(container) == false)
+        containers.Add(container);
+      else
+        Log.Error("The container is already added");
+    }
 
     /// <summary>
-    /// Dependencies container used.
+    /// Remove a dependencies container.
     /// </summary>
-    /// <value></value>
-    public IDependencyContainer Container { get; set; }
+    /// <param name="container">Dependency container</param>
+    public void RemoveContainer(IDependencyContainer container)
+    {
+      if (containers.Contains(container) == true)
+        containers.Remove(container);
+      else
+        Log.Error("Container not found");
+    }
+
+    /// <summary>
+    /// Remove all dependencies containers.
+    /// </summary>
+    public void RemoveAllContainers() => containers.Clear();
 
     /// <summary>
     /// Look for 'Inject' attributes and injects available objects in the container.
@@ -54,6 +72,8 @@ namespace FronkonGames.GameWork.Core
         InjectProperty(target, propertyInfos[i]);
     }
 
+    private List<IDependencyContainer> containers = new List<IDependencyContainer>();
+
     private void InjectField(object target, FieldInfo fieldInfo)
     {
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
@@ -61,9 +81,18 @@ namespace FronkonGames.GameWork.Core
       {
         if (injectAttribute.mode == SearchIn.Container)
         {
-          if (Container.Contains(fieldInfo.FieldType) == true)
-            fieldInfo.SetValue(target, Container.Get(fieldInfo.FieldType));
-          else
+          bool dependencyFound = false;
+          for (int i = 0; i < containers.Count; i++)
+          {
+            if (containers[i].Contains(fieldInfo.FieldType) == true)
+            {
+              fieldInfo.SetValue(target, containers[i].Get(fieldInfo.FieldType));
+              dependencyFound = true;
+              break;
+            }
+          }
+          
+          if (dependencyFound == false)
             Log.Error($"Type '{fieldInfo.FieldType}' not registered");
         }
         else
@@ -81,6 +110,8 @@ namespace FronkonGames.GameWork.Core
 
             if (component != null)
               fieldInfo.SetValue(target, component);
+            else
+              Log.Error($"Type '{fieldInfo.FieldType}' not found in '{monoBehaviour.name}'");
           }
           else
             Log.Error($"'{target}' is not a BaseMonoBehaviour");
@@ -91,12 +122,45 @@ namespace FronkonGames.GameWork.Core
     private void InjectProperty(object target, PropertyInfo propertyInfo)
     {
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
-      if (injectAttribute != null && injectAttribute.mode == SearchIn.Container)
+      if (injectAttribute != null)
       {
-        if (Container.Contains(propertyInfo.PropertyType) == true)
-          propertyInfo.SetValue(target, Container.Get(propertyInfo.PropertyType));
+        if (injectAttribute.mode == SearchIn.Container)
+        {
+          bool dependencyFound = false;
+          for (int i = 0; i < containers.Count; i++)
+          {
+            if (containers[i].Contains(propertyInfo.PropertyType) == true)
+            {
+              propertyInfo.SetValue(target, containers[i].Get(propertyInfo.PropertyType));
+              dependencyFound = true;
+              break;
+            }
+          }
+
+          if (dependencyFound == false)
+            Log.Error($"Type '{propertyInfo.PropertyType}' not registered");
+        }
         else
-          Log.Error($"Type '{propertyInfo.PropertyType}' not registered");
+        {
+          BaseMonoBehaviour monoBehaviour = target as BaseMonoBehaviour;
+          if (monoBehaviour != null)
+          {
+            Component component = null;
+            if (injectAttribute.mode == SearchIn.Components)
+              component = monoBehaviour.GetComponent(propertyInfo.PropertyType);
+            else if (injectAttribute.mode == SearchIn.Parent)
+              component = monoBehaviour.GetComponentInParent(propertyInfo.PropertyType);
+            else if (injectAttribute.mode == SearchIn.Childrens)
+              component = monoBehaviour.GetComponentInChildren(propertyInfo.PropertyType);
+
+            if (component != null)
+              propertyInfo.SetValue(target, component);
+            else
+              Log.Error($"Type '{propertyInfo.PropertyType}' not found in '{monoBehaviour.name}'");
+          }
+          else
+            Log.Error($"'{target}' is not a BaseMonoBehaviour");
+        }
       }
     }
   }

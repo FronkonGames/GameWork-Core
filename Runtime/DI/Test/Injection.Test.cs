@@ -44,13 +44,15 @@ public partial class InjectionTests
   [UnityTest]
   public IEnumerator Injection()
   {
-    Injector injector = new Injector(new DependencyContainer());
+    DependencyContainer dependencyContainer = new DependencyContainer();
+    Injector injector = new Injector();
+    injector.AddContainer(dependencyContainer);
 
     TestInjection testInjection = new TestInjection();
 
     ClassA classA = new ClassA();
     ClassB classB = new ClassB();
-    injector.Container.Register(classA, classB);
+    dependencyContainer.Register(classA, classB);
 
     injector.Resolve(testInjection);
 
