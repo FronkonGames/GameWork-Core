@@ -41,7 +41,7 @@ namespace FronkonGames.GameWork.Core
     /// <returns>Object or null</returns>
     public object Get(Type type)
     {
-      object obj = container.ContainsKey(type) == true ? container[type] : null;
+      object obj = Contains(type) == true ? container[type] : null;
       if (obj == null)
         Log.Error($"Object '{type}' not found");
 
@@ -66,7 +66,7 @@ namespace FronkonGames.GameWork.Core
     {
       Type type = obj.GetType();
 
-      if (container.ContainsKey(type) == false)
+      if (Contains(type) == false)
         container.Add(type, obj);
     }
 
@@ -76,7 +76,7 @@ namespace FronkonGames.GameWork.Core
     /// <param name="type">Type</param>
     public void Remove(Type type)
     {
-      if (container.ContainsKey(type) == true)
+      if (Contains(type) == true)
         container.Remove(type);
       else
         Log.Error($"Object '{type}' not found");

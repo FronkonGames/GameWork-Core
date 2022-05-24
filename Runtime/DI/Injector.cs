@@ -26,6 +26,9 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public sealed class Injector : IInjector
   {
+
+    private List<IDependencyContainer> containers = new List<IDependencyContainer>();
+
     /// <summary>
     /// Add a dependencies container.
     /// </summary>
@@ -71,8 +74,6 @@ namespace FronkonGames.GameWork.Core
       for (int i = 0; i < propertyInfos.Length; ++i)
         InjectProperty(target, propertyInfos[i]);
     }
-
-    private List<IDependencyContainer> containers = new List<IDependencyContainer>();
 
     private void InjectField(object target, FieldInfo fieldInfo)
     {

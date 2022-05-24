@@ -16,7 +16,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System.Collections;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.TestTools;
+using FronkonGames.GameWork.Foundation;
 using FronkonGames.GameWork.Core;
 
 /// <summary>
@@ -29,13 +31,36 @@ public partial class InjectionTests
 
   public class TestInjection
   {
-    public ClassA ClassA { get { return testA; } }
+    public ClassA ClassA => testA;
 
     [Inject]
     public ClassB ClassB { get; set; }
 
     [Inject]
     private ClassA testA;
+  }
+
+  public class BehaviourA : MonoBehaviour { }
+ 
+  public class BehaviourB : BaseMonoBehaviour
+  {
+    public BehaviourA BehaviourA => behaviourA;
+
+    [Inject(SearchIn.Parent)]
+    private BehaviourA behaviourA;
+  }
+
+  public class MonoBehaviourInjectionTest : BaseMonoBehaviour
+  {
+    public BehaviourA BehaviourA => behaviourA;
+
+    public BehaviourB BehaviourB => behaviourB;
+
+    [Inject(SearchIn.Components)]
+    private BehaviourA behaviourA;
+
+    [Inject(SearchIn.Childrens)]
+    private BehaviourB behaviourB;
   }
 
   /// <summary>
@@ -58,6 +83,22 @@ public partial class InjectionTests
 
     Assert.NotNull(testInjection.ClassA);
     Assert.NotNull(testInjection.ClassB);
+
+    GameObject gameObject = new GameObject();
+    gameObject.AddComponent<BehaviourA>();
+
+    GameObject child = new GameObject();
+    child.transform.parent = gameObject.transform;
+    BehaviourB behaviourB = child.AddComponent<BehaviourB>();
+
+    MonoBehaviourInjectionTest monoBehaviourInjectionTest = gameObject.AddComponent<MonoBehaviourInjectionTest>();
+
+    injector.Resolve(monoBehaviourInjectionTest);
+    injector.Resolve(behaviourB);
+
+    Assert.NotNull(monoBehaviourInjectionTest.BehaviourA);
+    Assert.NotNull(monoBehaviourInjectionTest.BehaviourB);
+    Assert.NotNull(behaviourB.BehaviourA);
 
     yield return null;
   }
