@@ -25,7 +25,7 @@ namespace FronkonGames.GameWork.Core
   public class Event : ScriptableEvent
   {
     [SerializeField]
-    private UnityEvent events;
+    private UnityEvent events = new UnityEvent();
 
     /// <summary>
     /// Invokes the event.
@@ -36,7 +36,7 @@ namespace FronkonGames.GameWork.Core
     /// Subscribes call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Subscribe(UnityAction call) => events.AddListener(call);
+    public void Subscribe(UnityAction call) => events?.AddListener(call);
 
     /// <summary>
     /// Unsubscribe call to the event.
@@ -61,7 +61,7 @@ namespace FronkonGames.GameWork.Core
     public T0 Value { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0> events;
+    private UnityEvent<T0> events = new UnityEvent<T0>();
 
     /// <summary>
     /// Invokes the event.
@@ -112,7 +112,7 @@ namespace FronkonGames.GameWork.Core
     public T1 Value1 { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0, T1> events;
+    private UnityEvent<T0, T1> events = new UnityEvent<T0, T1>();
 
     /// <summary>
     /// Invokes the event.
@@ -169,7 +169,7 @@ namespace FronkonGames.GameWork.Core
     public T2 Value2 { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0, T1, T2> events;
+    private UnityEvent<T0, T1, T2> events = new UnityEvent<T0, T1, T2>();
 
     /// <summary>
     /// Invokes the event.
