@@ -83,4 +83,10 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   [CreateAssetMenu(fileName = "GameObjectEvent", menuName = "Game:Work/Events/GameObject")]
   public class GameObjectEvent : Event<GameObject> { }
+
+  /// <summary>
+  /// Event with Component parameter.
+  /// </summary>
+  [CreateAssetMenu(fileName = "ComponentEvent", menuName = "Game:Work/Events/Component")]
+  public class ComponentEvent : Event<Component> { }
 }

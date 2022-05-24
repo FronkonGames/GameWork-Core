@@ -16,6 +16,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using UnityEngine;
 using UnityEngine.Events;
+using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
@@ -36,13 +37,21 @@ namespace FronkonGames.GameWork.Core
     /// Subscribes call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Subscribe(UnityAction call) => events?.AddListener(call);
+    public void Subscribe(UnityAction call)
+    {
+      Check.IsNotNull(call);
+      events.AddListener(call);
+    }
 
     /// <summary>
     /// Unsubscribe call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Unsubscribe(UnityAction call) => events.RemoveListener(call);
+    public void Unsubscribe(UnityAction call)
+    {
+      Check.IsNotNull(call);
+      events.RemoveListener(call);
+    }
 
     /// <summary>
     /// Remove all event subscriptions.
@@ -82,13 +91,21 @@ namespace FronkonGames.GameWork.Core
     /// Subscribes call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Subscribe(UnityAction<T0> call) => events.AddListener(call);
+    public void Subscribe(UnityAction<T0> call)
+    {
+      Check.IsNotNull(call);
+      events.AddListener(call);
+    }
 
     /// <summary>
     /// Unsubscribe call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Unsubscribe(UnityAction<T0> call) => events.RemoveListener(call);
+    public void Unsubscribe(UnityAction<T0> call)
+    {
+      Check.IsNotNull(call);
+      events.RemoveListener(call);
+    }
 
     /// <summary>
     /// Remove all event subscriptions.
@@ -134,13 +151,21 @@ namespace FronkonGames.GameWork.Core
     /// Subscribes call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Subscribe(UnityAction<T0, T1> call) => events.AddListener(call);
+    public void Subscribe(UnityAction<T0, T1> call)
+    {
+      Check.IsNotNull(call);
+      events.AddListener(call);
+    }
 
     /// <summary>
     /// Unsubscribe call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Unsubscribe(UnityAction<T0, T1> call) => events.RemoveListener(call);
+    public void Unsubscribe(UnityAction<T0, T1> call)
+    {
+      Check.IsNotNull(call);
+      events.RemoveListener(call);
+    }
 
     /// <summary>
     /// Remove all event subscriptions.
@@ -192,13 +217,21 @@ namespace FronkonGames.GameWork.Core
     /// Subscribes call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Subscribe(UnityAction<T0, T1, T2> call) => events.AddListener(call);
+    public void Subscribe(UnityAction<T0, T1, T2> call)
+    {
+      Check.IsNotNull(call);
+      events.AddListener(call);
+    }
 
     /// <summary>
     /// Unsubscribe call to the event.
     /// </summary>
     /// <param name="call">Action</param>
-    public void Unsubscribe(UnityAction<T0, T1, T2> call) => events.RemoveListener(call);
+    public void Unsubscribe(UnityAction<T0, T1, T2> call)
+    {
+      Check.IsNotNull(call);
+      events.RemoveListener(call);
+    }
 
     /// <summary>
     /// Remove all event subscriptions.

@@ -38,6 +38,7 @@ public partial class EventsTests
     public UnityAction<Vector3> vector3Action;
     public UnityAction<Quaternion> quaternionAction;
     public UnityAction<GameObject> gameObjectAction;
+    public UnityAction<Component> componentAction;
 
     public bool boolValue = false;
     public byte byteValue = 0;
@@ -48,6 +49,7 @@ public partial class EventsTests
     public Vector3 vector3Value = Vector3.zero;
     public Quaternion quaternionValue = Quaternion.identity;
     public GameObject gameObjectValue = null;
+    public Component componentValue = null;
 
     private void VoidFunc() => boolValue = !boolValue;
     private void ByteFunc(byte value) => byteValue = value;
@@ -59,6 +61,7 @@ public partial class EventsTests
     private void Vector3Func(Vector3 value) => vector3Value = value;
     private void QuaternionFunc(Quaternion value) => quaternionValue = value;
     private void GameObjectFunc(GameObject value) => gameObjectValue = value;
+    private void ComponentFunc(Component value) => componentValue = value;
 
     public TestEvents()
     {
@@ -72,6 +75,7 @@ public partial class EventsTests
       vector3Action += Vector3Func;
       quaternionAction += QuaternionFunc;
       gameObjectAction += GameObjectFunc;
+      componentAction += ComponentFunc;
     }
   }
 
