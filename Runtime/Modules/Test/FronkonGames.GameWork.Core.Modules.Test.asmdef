@@ -1,0 +1,11 @@
+{
+  "name": "FronkonGames.GameWork.Core.Modules.Test",
+  "references": [
+    "FronkonGames.GameWork.Core",
+    "FronkonGames.GameWork.Foundation"
+  ],
+  "optionalUnityReferences": [ "TestAssemblies" ],
+  "includePlatforms": [ "Editor" ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false
+}
