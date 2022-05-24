@@ -97,6 +97,7 @@ public partial class EventsTests
     Vector3Event vector3Event = ScriptableObject.CreateInstance<Vector3Event>();
     QuaternionEvent quaternionEvent = ScriptableObject.CreateInstance<QuaternionEvent>();
     GameObjectEvent gameObjectEvent = ScriptableObject.CreateInstance<GameObjectEvent>();
+    ComponentEvent componentEvent = ScriptableObject.CreateInstance<ComponentEvent>();
 
     voidEvent.Subscribe(testEvents.voidAction);
     voidEvent.Raise();
@@ -150,6 +151,12 @@ public partial class EventsTests
     gameObjectEvent.Raise(gameObject);
     Assert.AreEqual(testEvents.gameObjectValue, gameObject);
     gameObjectEvent.Unsubscribe(testEvents.gameObjectAction);
+
+    Transform transform = gameObject.GetComponent<Transform>();
+    componentEvent.Subscribe(testEvents.componentAction);
+    componentEvent.Raise(transform);
+    Assert.IsNotNull(testEvents.componentAction);
+    componentEvent.Unsubscribe(testEvents.componentAction);
 
     yield return null;
   }
