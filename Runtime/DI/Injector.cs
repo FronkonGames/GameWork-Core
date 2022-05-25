@@ -80,6 +80,8 @@ namespace FronkonGames.GameWork.Core
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
+        Log.Info($"Injecting '{target.ToString()}' {fieldInfo.FieldType.ToString()}");
+
         if (injectAttribute.mode == SearchIn.Container)
         {
           bool dependencyFound = false;
@@ -87,6 +89,7 @@ namespace FronkonGames.GameWork.Core
           {
             if (containers[i].Contains(fieldInfo.FieldType) == true)
             {
+              Log.Info($"'{target.ToString()}' inject with {fieldInfo.FieldType.ToString()}");
               fieldInfo.SetValue(target, containers[i].Get(fieldInfo.FieldType));
               dependencyFound = true;
               break;
@@ -110,7 +113,10 @@ namespace FronkonGames.GameWork.Core
               component = monoBehaviour.GetComponentInChildren(fieldInfo.FieldType);
 
             if (component != null)
+            {
+              Log.Info($"'{target.ToString()}' inject with {component.ToString()}");
               fieldInfo.SetValue(target, component);
+            }
             else
               Log.Error($"Type '{fieldInfo.FieldType}' not found in '{monoBehaviour.name}'");
           }
@@ -125,6 +131,8 @@ namespace FronkonGames.GameWork.Core
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
+        Log.Info($"Injecting '{target.ToString()}' {propertyInfo.PropertyType.ToString()}");
+
         if (injectAttribute.mode == SearchIn.Container)
         {
           bool dependencyFound = false;
@@ -132,6 +140,7 @@ namespace FronkonGames.GameWork.Core
           {
             if (containers[i].Contains(propertyInfo.PropertyType) == true)
             {
+              Log.Info($"'{target.ToString()}' inject with {propertyInfo.PropertyType.ToString()}");
               propertyInfo.SetValue(target, containers[i].Get(propertyInfo.PropertyType));
               dependencyFound = true;
               break;
@@ -155,7 +164,10 @@ namespace FronkonGames.GameWork.Core
               component = monoBehaviour.GetComponentInChildren(propertyInfo.PropertyType);
 
             if (component != null)
+            {
+              Log.Info($"'{target.ToString()}' inject with {component.ToString()}");
               propertyInfo.SetValue(target, component);
+            }
             else
               Log.Error($"Type '{propertyInfo.PropertyType}' not found in '{monoBehaviour.name}'");
           }

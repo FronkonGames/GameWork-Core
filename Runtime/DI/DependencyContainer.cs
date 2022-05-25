@@ -43,7 +43,7 @@ namespace FronkonGames.GameWork.Core
     {
       object obj = Contains(type) == true ? container[type] : null;
       if (obj == null)
-        Log.Error($"Object '{type}' not found");
+        Log.Error($"Type '{type}' not registered");
 
       return obj;
     }
@@ -65,9 +65,12 @@ namespace FronkonGames.GameWork.Core
     public void Register(object obj)
     {
       Type type = obj.GetType();
+      if (Contains(type) == false && typeof(Game).IsAssignableFrom(type) == false)
+      {
+        Log.Info($"{type.ToString()} registered");
 
-      if (Contains(type) == false)
         container.Add(type, obj);
+      }
     }
 
     /// <summary>
@@ -79,7 +82,7 @@ namespace FronkonGames.GameWork.Core
       if (Contains(type) == true)
         container.Remove(type);
       else
-        Log.Error($"Object '{type}' not found");
+        Log.Error($"Type '{type}' not registered");
     }
 
     /// <summary>

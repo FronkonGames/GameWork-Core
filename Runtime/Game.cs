@@ -102,7 +102,7 @@ namespace FronkonGames.GameWork.Core
     protected IInjector injector;
     protected IDependencyContainer dependencyContainer;
 
-    private bool sceneInitializing;
+    private bool sceneLoaded;
 
     /// <summary>
     /// Register modules. Only allowed in OnInitialize.
@@ -110,7 +110,7 @@ namespace FronkonGames.GameWork.Core
     /// <param name="modules">List of modules.</param>
     public void RegisterModule(params IModule[] modules)
     {
-      if (Initialized == true || sceneInitializing == true)
+      if (Initialized == true || sceneLoaded == true)
         Log.Error("Cannot to registered outsize of OnInitialize cycle");
 
       for (int i = 0; i < modules.Length; ++i)
@@ -123,7 +123,7 @@ namespace FronkonGames.GameWork.Core
     /// <param name="types">Types of modules.</param>
     public void RegisterModule(params Type[] types)
     {
-      if (Initialized == true || sceneInitializing == true)
+      if (Initialized == true || sceneLoaded == true)
         Log.Error("Cannot to registered outsize of OnInitialize cycle");
 
       for (int i = 0; i < types.Length; ++i)
@@ -246,9 +246,6 @@ namespace FronkonGames.GameWork.Core
 #endif
 
       allModules.Add(module);
-
-      if (dependencyContainer.Contains(type) == false)
-        dependencyContainer.Register(module);
     }
 
     private void UnregisterModule(IModule module)
@@ -294,27 +291,42 @@ namespace FronkonGames.GameWork.Core
         dependencyContainer.Remove(type);
     }
 
-    private void ResolveDependencies()
+    private void ResolveLoadedSceneDependencies()
     {
-      System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-      timer.Start();
+      using (Profiling.Time("Resolve Scene Injection"))
+      {
+        System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+        timer.Start();
 
-      UnityEngine.Object[] objects = FindObjectsOfType<UnityEngine.Object>();
+        dependencyContainer.Clear();
 
-      dependencyContainer.Clear();
-      dependencyContainer.Register(objects);
+        List<Component> monoBehaviours = new List<Component>();
+        for (int i = 0; i < SceneManager.sceneCount; ++i)
+        {
+          Scene scene = SceneManager.GetSceneAt(i);
+          GameObject[] rootGameObjects = scene.GetRootGameObjects();
 
-      for (int i = 0; i < objects.Length; ++i)
-        injector.Resolve(objects[i]);
+          for (int j = 0; j < rootGameObjects.Length; ++j)
+          {
+            List<GameObject> gameObjects = rootGameObjects[j].GetAllChildrenAndSelf();
+            for (int k = 0; k < gameObjects.Count; ++k)
+              monoBehaviours.AddRange(gameObjects[k].GetComponents<MonoBehaviour>());
+          }
+        }
 
-      Log.Info($"Resolved {objects.Length} object dependencies in {(float)timer.ElapsedMilliseconds * 0.001f:0.000} seconds");
+        for (int i = 0; i < monoBehaviours.Count; ++i)
+          dependencyContainer.Register(monoBehaviours[i]);
+
+        for (int i = 0; i < monoBehaviours.Count; ++i)
+          injector.Resolve(monoBehaviours[i]);
+      }
     }
 
     private void EntryPoint()
     {
       DontDestroyOnLoad(this.gameObject);
 
-      SceneManager.sceneUnloaded += OnSceneUnloaded;
+      SceneManager.sceneLoaded += OnSceneLoaded;
 
       dependencyContainer = new DependencyContainer();
       injector = new Injector();
@@ -366,15 +378,15 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     private void Update()
     {
-      if (this.Initialized == false || sceneInitializing == true)
+      if (this.Initialized == false || sceneLoaded == true)
       {
+        ResolveLoadedSceneDependencies();
+
         if (this.Initialized == false)
         {
           this.OnInitialized();
           this.Initialized = true;
         }
-
-        ResolveDependencies();
 
         for (int i = 0; i < initializables.Count; ++i)
         {
@@ -385,7 +397,7 @@ namespace FronkonGames.GameWork.Core
           }
         }
 
-        sceneInitializing = false;
+        sceneLoaded = false;
       }
 
       if (ShouldUpdate == true && this.WillDestroy == false)
@@ -463,7 +475,7 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     private void OnDestroy()
     {
-      SceneManager.sceneUnloaded -= OnSceneUnloaded;
+      SceneManager.sceneLoaded -= OnSceneLoaded;
 
       this.WillDestroy = true;
 
@@ -540,9 +552,9 @@ namespace FronkonGames.GameWork.Core
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     private static void OnBeforeSplashScreen() => Game.Instance.EntryPoint();
 
-    private void OnSceneUnloaded(Scene current)
+    private void OnSceneLoaded(Scene current, LoadSceneMode mode)
     {
-      sceneInitializing = true;
+      sceneLoaded = true;
 
       for (int i = 0; i < beforeSceneLoad.Count; ++i)
         beforeSceneLoad[i].OnBeforeSceneLoad();

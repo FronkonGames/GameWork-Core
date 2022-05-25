@@ -14,14 +14,14 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using UnityEngine;
+using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// MonoBehaviour module.
+  /// BaseMonoBehaviour module.
   /// </summary>
-  public abstract class MonoBehaviourModule : MonoBehaviour, IModule
+  public abstract class MonoBehaviourModule : BaseMonoBehaviour, IModule
   {
   }
 }
