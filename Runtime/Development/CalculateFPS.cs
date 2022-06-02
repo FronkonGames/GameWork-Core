@@ -14,6 +14,7 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
@@ -25,14 +26,39 @@ namespace FronkonGames.GameWork.Core
                                      IUpdatable
   {
     /// <summary>
-    /// Last FPS value.
+    /// Last FPS.
     /// </summary>
     /// <value>FPS.</value>
     public float CurrentFPS { get; private set; }
 
+    /// <summary>
+    /// Average FPS.
+    /// </summary>
+    /// <value>FPS.</value>
+    public float AverageFPS { get; private set; }
+
     private int frames;
     private float deltaTime;
-    private const int updatePerSecond = 2;
+
+    private Queue<float> history = new Queue<float>(HistoryFrames);
+    private IEnumerator<float> historyEnumerator;
+
+    private const int UpdatePerSecond = 2;
+    private const int HistoryFrames = 100;
+
+    /// <summary>
+    /// Reset the counters.
+    /// </summary>
+    public void Reset()
+    {
+      CurrentFPS = 0.0f;
+      AverageFPS = 0.0f;
+      frames = 0;
+      deltaTime = 0.0f;
+
+      history.Clear();
+      historyEnumerator = history.GetEnumerator();
+    }
 
     /// <summary>
     /// Is it initialized?
@@ -49,12 +75,7 @@ namespace FronkonGames.GameWork.Core
     /// <summary>
     /// When initialize.
     /// </summary>
-    public void OnInitialize()
-    {
-      frames = 0;
-      deltaTime = 0.0f;
-      CurrentFPS = 0.0f;
-    }
+    public void OnInitialize() => Reset();
 
     /// <summary>
     /// At the end of initialization.
@@ -75,12 +96,24 @@ namespace FronkonGames.GameWork.Core
       ++frames;
       deltaTime += Time.unscaledDeltaTime;
       
-      float lapse = 1.0f / updatePerSecond;
+      float lapse = 1.0f / UpdatePerSecond;
       if (deltaTime > lapse)
       {
         CurrentFPS = frames / deltaTime;
         frames = 0;
         deltaTime -= lapse;
+
+        int count = history.Count;
+        if (count >= HistoryFrames)
+          history.Dequeue();
+
+        history.Enqueue(CurrentFPS);
+
+        float total = 0.0f;
+        while (historyEnumerator.MoveNext() == true)
+          total += historyEnumerator.Current;
+
+        AverageFPS = total / count;
       }
     }
 
