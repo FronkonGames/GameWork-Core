@@ -68,6 +68,9 @@ namespace FronkonGames.GameWork.Core
     {
       if (this.Initialized == false || sceneLoaded == true)
       {
+        if (this.Initialized == false)
+          ResolveChidsDependencies();
+
         ResolveLoadedSceneDependencies();
 
         if (this.Initialized == false)
@@ -164,6 +167,7 @@ namespace FronkonGames.GameWork.Core
     private void OnDestroy()
     {
       SceneManager.sceneLoaded -= OnSceneLoaded;
+      SceneManager.sceneUnloaded -= OnSceneUnloaded;
 
       this.WillDestroy = true;
 
@@ -181,13 +185,13 @@ namespace FronkonGames.GameWork.Core
       GUIables.Clear();
       renderableObjects.Clear();
       destructibles.Clear();
-      beforeSceneLoad.Clear();
+      sceneLoads.Clear();
 #if UNITY_ANDROID || UNITY_IOS
       lowMemories.Clear();
 #endif
       allModules.Clear();
 
-      dependencyContainer.Clear();
+      sceneDependencyContainer.Clear();
 
 #if UNITY_ANDROID || UNITY_IOS
       Application.lowMemory -= OnLowMemory;

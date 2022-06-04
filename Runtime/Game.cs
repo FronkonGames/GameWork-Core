@@ -92,10 +92,14 @@ namespace FronkonGames.GameWork.Core
       DontDestroyOnLoad(this.gameObject);
 
       SceneManager.sceneLoaded += OnSceneLoaded;
+      SceneManager.sceneUnloaded += OnSceneUnloaded;
 
-      dependencyContainer = new DependencyContainer();
+      sceneDependencyContainer = new DependencyContainer();
+      childDependencyContainer = new DependencyContainer();
+
       injector = new Injector();
-      injector.AddContainer(dependencyContainer);
+      injector.AddContainer(sceneDependencyContainer);
+      injector.AddContainer(childDependencyContainer);
 
       Application.wantsToQuit += OnWantsToQuit;
 #if UNITY_ANDROID || UNITY_IOS
@@ -112,8 +116,14 @@ namespace FronkonGames.GameWork.Core
     {
       sceneLoaded = true;
 
-      for (int i = 0; i < beforeSceneLoad.Count; ++i)
-        beforeSceneLoad[i].OnBeforeSceneLoad();
+      for (int i = 0; i < sceneLoads.Count; ++i)
+        sceneLoads[i].OnSceneLoad(current.buildIndex);
+    }
+
+    private void OnSceneUnloaded(Scene current)
+    {
+      for (int i = 0; i < sceneLoads.Count; ++i)
+        sceneLoads[i].OnSceneUnload();
     }
 
     private bool OnWantsToQuit()

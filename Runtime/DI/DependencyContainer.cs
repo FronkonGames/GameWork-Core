@@ -66,11 +66,7 @@ namespace FronkonGames.GameWork.Core
     {
       Type type = obj.GetType();
       if (Contains(type) == false && typeof(Game).IsAssignableFrom(type) == false)
-      {
-        Log.Info($"{type.ToString()} registered");
-
         container.Add(type, obj);
-      }
     }
 
     /// <summary>

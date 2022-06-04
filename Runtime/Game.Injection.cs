@@ -14,6 +14,7 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//#define ENABLE_PROFILING
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,16 +31,41 @@ namespace FronkonGames.GameWork.Core
                                        IDestructible
   {
     protected IInjector injector;
-    protected IDependencyContainer dependencyContainer;
+    protected IDependencyContainer sceneDependencyContainer;
+    protected IDependencyContainer childDependencyContainer;
+
+    private void ResolveChidsDependencies()
+    {
+#if ENABLE_PROFILING
+      using (Profiling.Time("Resolve childs dependencies"))
+#endif
+      {
+        childDependencyContainer.Clear();
+
+        MonoBehaviour[] monoBehaviours = this.gameObject.GetComponentsInChildren<MonoBehaviour>();
+
+        for (int i = 0; i < monoBehaviours.Length; ++i)
+        {
+          if (typeof(IModule).IsAssignableFrom(monoBehaviours[i].GetType()) == true)
+          {
+            RegisterModule(monoBehaviours[i]);
+
+            childDependencyContainer.Register(monoBehaviours[i]);
+          }
+        }
+
+        for (int i = 0; i < monoBehaviours.Length; ++i)
+          injector.Resolve(monoBehaviours[i]);
+      }
+    }
 
     private void ResolveLoadedSceneDependencies()
     {
-      using (Profiling.Time("Resolve Scene Injection"))
+#if ENABLE_PROFILING
+      using (Profiling.Time("Resolve scene dependencies"))
+#endif
       {
-        System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-        timer.Start();
-
-        dependencyContainer.Clear();
+        sceneDependencyContainer.Clear();
 
         List<Component> monoBehaviours = new List<Component>();
         for (int i = 0; i < SceneManager.sceneCount; ++i)
@@ -56,7 +82,7 @@ namespace FronkonGames.GameWork.Core
         }
 
         for (int i = 0; i < monoBehaviours.Count; ++i)
-          dependencyContainer.Register(monoBehaviours[i]);
+          sceneDependencyContainer.Register(monoBehaviours[i]);
 
         for (int i = 0; i < monoBehaviours.Count; ++i)
           injector.Resolve(monoBehaviours[i]);

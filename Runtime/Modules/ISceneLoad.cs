@@ -17,13 +17,18 @@
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// Before scene is loaded.
+  /// Scene un/loaded.
   /// </summary>
-  public interface IBeforeSceneLoad : IModule
+  public interface ISceneLoad : IModule
   {
     /// <summary>
-    /// Before scene is loaded.
+    /// Scene is loaded.
     /// </summary>
-    void OnBeforeSceneLoad();
+    void OnSceneLoad(int sceneBuildIndex);
+
+    /// <summary>
+    /// Scene is unloaded.
+    /// </summary>
+    void OnSceneUnload();
   }
 }

@@ -80,8 +80,6 @@ namespace FronkonGames.GameWork.Core
       InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
-        Log.Info($"Injecting '{target.ToString()}' {fieldInfo.FieldType.ToString()}");
-
         if (injectAttribute.mode == SearchIn.Container)
         {
           bool dependencyFound = false;

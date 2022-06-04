@@ -35,7 +35,7 @@ namespace FronkonGames.GameWork.Core
     private readonly FastList<IGUI> GUIables = new FastList<IGUI>();
     private readonly FastList<IRenderObject> renderableObjects = new FastList<IRenderObject>();
     private readonly FastList<IDestructible> destructibles = new FastList<IDestructible>();
-    private readonly FastList<IBeforeSceneLoad> beforeSceneLoad = new FastList<IBeforeSceneLoad>();
+    private readonly FastList<ISceneLoad> sceneLoads = new FastList<ISceneLoad>();
 #if UNITY_ANDROID || UNITY_IOS
     private readonly FastList<ILowMemory> lowMemories = new FastList<ILowMemory>();
 #endif
@@ -44,8 +44,8 @@ namespace FronkonGames.GameWork.Core
     /// <summary>
     /// Register modules. Only allowed in OnInitialize.
     /// </summary>
-    /// <param name="modules">List of modules.</param>
-    public void RegisterModule(params IModule[] modules)
+    /// <param name="object">List of modules.</param>
+    public void RegisterModule(params object[] modules)
     {
       if (Initialized == true || sceneLoaded == true)
         Log.Error("Cannot to registered outsize of OnInitialize cycle");
@@ -90,7 +90,7 @@ namespace FronkonGames.GameWork.Core
     /// Unregister modules.
     /// </summary>
     /// <param name="modules">Listado de modulos.</param>
-    public void UnregisterModule(params IModule[] modules)
+    public void UnregisterModule(params object[] modules)
     {
       for (int i = 0; i < modules.Length; ++i)
         UnregisterModule(modules[i]);
@@ -147,48 +147,51 @@ namespace FronkonGames.GameWork.Core
       return modules;
     }
 
-    private void RegisterModule(IModule module)
+    private void RegisterModule(object obj)
     {
-      Type type = module.GetType();
+      Type type = obj.GetType();
 
       if (typeof(IInitializable).IsAssignableFrom(type) == true)
       {
-        IInitializable initializable = module as IInitializable;
+        IInitializable initializable = obj as IInitializable;
         initializable.OnInitialize();
 
         initializables.Add(initializable);
       }
 
       if (typeof(IActivable).IsAssignableFrom(type) == true)
-        activables.Add(module as IActivable);
+        activables.Add(obj as IActivable);
 
       if (typeof(IUpdatable).IsAssignableFrom(type) == true)
-        updatables.Add(module as IUpdatable);
+        updatables.Add(obj as IUpdatable);
 
       if (typeof(IGUI).IsAssignableFrom(type) == true)
-        GUIables.Add(module as IGUI);
+        GUIables.Add(obj as IGUI);
 
       if (typeof(IRenderObject).IsAssignableFrom(type) == true)
-        renderableObjects.Add(module as IRenderObject);
+        renderableObjects.Add(obj as IRenderObject);
 
       if (typeof(IDestructible).IsAssignableFrom(type) == true)
-        destructibles.Add(module as IDestructible);
+        destructibles.Add(obj as IDestructible);
 
-      if (typeof(IBeforeSceneLoad).IsAssignableFrom(type) == true)
-        beforeSceneLoad.Add(module as IBeforeSceneLoad);
+      if (typeof(ISceneLoad).IsAssignableFrom(type) == true)
+        sceneLoads.Add(obj as ISceneLoad);
 
 #if UNITY_ANDROID || UNITY_IOS
       if (typeof(ILowMemory).IsAssignableFrom(type) == true)
         lowMemories.Add(module as ILowMemory);
 #endif
 
-      allModules.Add(module);
+      if (typeof(IModule).IsAssignableFrom(type) == true)
+        allModules.Add(obj as IModule);
+      else
+        Log.Error($"Object '{type.Name}' is not a valid module");
     }
 
-    private void UnregisterModule(IModule module)
+    private void UnregisterModule(object module)
     {
       Type type = module.GetType();
-      if (allModules.Contains(module) == true)
+      if (allModules.Contains(module as IModule) == true)
       {
         if (typeof(IInitializable).IsAssignableFrom(type) == true)
         {
@@ -213,19 +216,21 @@ namespace FronkonGames.GameWork.Core
         if (typeof(IDestructible).IsAssignableFrom(type) == true)
           destructibles.Remove(module as IDestructible);
 
-        if (typeof(IBeforeSceneLoad).IsAssignableFrom(type) == true)
-          beforeSceneLoad.Remove(module as IBeforeSceneLoad);
+        if (typeof(ISceneLoad).IsAssignableFrom(type) == true)
+          sceneLoads.Remove(module as ISceneLoad);
 
 #if UNITY_ANDROID || UNITY_IOS
       if (typeof(ILowMemory).IsAssignableFrom(type) == true)
         lowMemories.Remove(module as ILowMemory);
 #endif
 
-        allModules.Remove(module);
+        allModules.Remove(module as IModule);
       }
+      else
+        Log.Error($"Object '{type.Name}' is not a valid module");
 
-      if (dependencyContainer.Contains(type) == true)
-        dependencyContainer.Remove(type);
+      if (sceneDependencyContainer.Contains(type) == true)
+        sceneDependencyContainer.Remove(type);
     }
   }
 }
