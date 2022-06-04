@@ -26,7 +26,6 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public sealed class Injector : IInjector
   {
-
     private List<IDependencyContainer> containers = new List<IDependencyContainer>();
 
     /// <summary>

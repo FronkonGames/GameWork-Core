@@ -26,6 +26,18 @@ namespace FronkonGames.GameWork.Core
                                      IUpdatable
   {
     /// <summary>
+    /// Is it initialized?
+    /// </summary>
+    /// <value>Value</value>
+    public bool Initialized { get; set; }
+
+    /// <summary>
+    /// Should be updated?
+    /// </summary>
+    /// <value>True/false.</value>
+    public bool ShouldUpdate { get; set; } = true;
+
+    /// <summary>
     /// Last FPS.
     /// </summary>
     /// <value>FPS.</value>
@@ -59,18 +71,6 @@ namespace FronkonGames.GameWork.Core
       history.Clear();
       historyEnumerator = history.GetEnumerator();
     }
-
-    /// <summary>
-    /// Is it initialized?
-    /// </summary>
-    /// <value>Value</value>
-    public bool Initialized { get; set; }
-
-    /// <summary>
-    /// Should be updated?
-    /// </summary>
-    /// <value>True/false.</value>
-    public bool ShouldUpdate { get; set; } = true;
 
     /// <summary>
     /// When initialize.

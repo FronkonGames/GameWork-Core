@@ -22,7 +22,7 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public enum SearchIn
   {
-    ///<summary>Find dependencies registered in a container.</summary>
+    ///<summary>Find dependencies registered in a container (default).</summary>
     Container,
 
     ///<summary>Find dependencies at the Components. Only available for BaseMonoBehaviour.</summary>
