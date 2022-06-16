@@ -18,13 +18,13 @@ using System;
 
 namespace FronkonGames.GameWork.Core
 {
-  public abstract class ConsoleCommandBase
+  public abstract class DevelopmentCommandBase
   {
     public string Id { get; set; }
 
     public string Description { get; set; }
 
-    public ConsoleCommandBase(string id, string description)
+    public DevelopmentCommandBase(string id, string description)
     {
       Id = id;
       Description = description;

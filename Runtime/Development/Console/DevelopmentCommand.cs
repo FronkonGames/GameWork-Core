@@ -21,7 +21,7 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// 
   /// </summary>
-  public class ConsoleCommand : ConsoleCommandBase
+  public class DevelopmentCommand : DevelopmentCommandBase
   {
     private Action action;
 
@@ -32,7 +32,7 @@ namespace FronkonGames.GameWork.Core
     /// <param name="description"></param>
     /// <param name="action"></param>
     /// <returns></returns>
-    public ConsoleCommand(string id, string description, Action action) : base(id, description) => this.action = action;
+    public DevelopmentCommand(string id, string description, Action action) : base(id, description) => this.action = action;
 
     /// <summary>
     /// Execute the commnand.
@@ -43,7 +43,7 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// 
   /// </summary>
-  public class ConsoleCommand<T> : ConsoleCommandBase
+  public class ConsoleCommand<T> : DevelopmentCommandBase
   {
     private Action<T> action;
 
@@ -65,7 +65,7 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// 
   /// </summary>
-  public class ConsoleCommand<T0, T1> : ConsoleCommandBase
+  public class ConsoleCommand<T0, T1> : DevelopmentCommandBase
   {
     private Action<T0, T1> action;
 
@@ -87,7 +87,7 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// 
   /// </summary>
-  public class ConsoleCommand<T0, T1, T2> : ConsoleCommandBase
+  public class ConsoleCommand<T0, T1, T2> : DevelopmentCommandBase
   {
     private Action<T0, T1, T2> action;
 
