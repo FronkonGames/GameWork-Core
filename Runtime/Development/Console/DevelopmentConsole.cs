@@ -39,6 +39,8 @@ namespace FronkonGames.GameWork.Core
     /// <value>Value</value>
     public bool Initialized { get; set; }
 
+    private GUIStyle style;
+
     private string consoleInput;
 
     private List<string> output = new List<string>();
@@ -82,6 +84,10 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     public void OnInitialize()
     {
+      style = new GUIStyle(GUI.skin.label);
+      style.fontSize = 12;
+
+      AddCommand(new DevelopmentCommand("?", "List all available commands.", () => { }));
     }
 
     /// <summary>
@@ -90,7 +96,6 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     public void OnInitialized()
     {
-      AddCommand(new DevelopmentCommand("?", "List all available commands.", () => { }));
     }
 
     /// <summary>
@@ -120,20 +125,63 @@ namespace FronkonGames.GameWork.Core
 
         string input = GUI.TextField(new Rect(0, 0, Screen.width, 24), consoleInput);
 
-        const float y = 24.0f;
+        float y = 24.0f;
         GUI.Box(new Rect(0, y, Screen.width, Screen.height - 24), "");
 
-        // ...
+        for (int i = 0; i < output.Count; ++i)
+        {
+          GUI.Label(new Rect(2.0f, y, Screen.width, 20.0f), output[i], style);
+          y += 16;
+        }
 
         consoleInput = input;
 
         UnityEngine.Event e = UnityEngine.Event.current;
         if (e.isKey == true)
         {
-          if (e.keyCode == KeyCode.Escape)
+          if (e.keyCode == KeyCode.Return && consoleInput.Length > 0)
+            ParseInput();
+          else if (e.keyCode == KeyCode.Escape)
             Show = false;
         }
       }
+    }
+
+    private void ParseInput()
+    {
+      string[] parts = consoleInput.Split(' ');
+      string commandId = parts[0].ToLower();
+
+      if (commands.ContainsKey(commandId) == true)
+      {
+        DevelopmentCommandBase command = commands[commandId];
+        if (command is DevelopmentCommand noArgsCommand)
+          noArgsCommand.Execute();
+        else
+        {
+          if (parts.Length == 2)
+          {
+            if (command is DevelopmentCommand<int> intCommand)
+            {
+              int value;
+              if (int.TryParse(parts[1], out value) == true)
+                intCommand.Execute(value);
+              // else Requires int parameter.
+            }
+            else if (command is DevelopmentCommand<float> floatCommand)
+            {
+              float value;
+              if (float.TryParse(parts[1], out value) == true)
+                floatCommand.Execute(value);
+              // else Requires float parameter.
+            }
+            else if (command is DevelopmentCommand<string> stringCommand)
+              stringCommand.Execute(parts[1]);
+          }
+          // else Missing args.
+        }
+      }
+      // else Command not found.
     }
   }
 }

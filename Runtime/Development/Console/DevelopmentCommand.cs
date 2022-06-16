@@ -43,7 +43,7 @@ namespace FronkonGames.GameWork.Core
   /// <summary>
   /// 
   /// </summary>
-  public class ConsoleCommand<T> : DevelopmentCommandBase
+  public class DevelopmentCommand<T> : DevelopmentCommandBase
   {
     private Action<T> action;
 
@@ -54,55 +54,11 @@ namespace FronkonGames.GameWork.Core
     /// <param name="description"></param>
     /// <param name="action"></param>
     /// <returns></returns>
-    public ConsoleCommand(string id, string description, Action<T> action) : base(id, description) => this.action = action;
+    public DevelopmentCommand(string id, string description, Action<T> action) : base(id, description) => this.action = action;
 
     /// <summary>
     /// Execute the commnand.
     /// </summary>
     public void Execute(T value) => action?.Invoke(value);
-  }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  public class ConsoleCommand<T0, T1> : DevelopmentCommandBase
-  {
-    private Action<T0, T1> action;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="description"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
-    public ConsoleCommand(string id, string description, Action<T0, T1> action) : base(id, description) => this.action = action;
-
-    /// <summary>
-    /// Execute the commnand.
-    /// </summary>
-    public void Execute(T0 value0, T1 value1) => action?.Invoke(value0, value1);
-  }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  public class ConsoleCommand<T0, T1, T2> : DevelopmentCommandBase
-  {
-    private Action<T0, T1, T2> action;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="description"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
-    public ConsoleCommand(string id, string description, Action<T0, T1, T2> action) : base(id, description) => this.action = action;
-
-    /// <summary>
-    /// Execute the commnand.
-    /// </summary>
-    public void Execute(T0 value0, T1 value1, T2 value2) => action?.Invoke(value0, value1, value2);
   }
 }

@@ -26,7 +26,7 @@ namespace FronkonGames.GameWork.Core
 
     public DevelopmentCommandBase(string id, string description)
     {
-      Id = id;
+      Id = id.ToLower();
       Description = description;
     }
   }
