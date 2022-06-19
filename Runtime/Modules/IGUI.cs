@@ -22,9 +22,9 @@ namespace FronkonGames.GameWork.Core
   public interface IGUI : IModule
   {
     /// <summary>
-    /// Ondrawgizmos event.
+    /// OnDrawGizmos event.
     /// </summary>
-    void OnDrawGizmos();
+    void OnGizmos();
 
     /// <summary>
     /// OnGUI event.
