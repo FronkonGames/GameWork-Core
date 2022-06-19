@@ -15,25 +15,18 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
   /// 
   /// </summary>
-  public abstract class DevelopmentCommand : ScriptableObject, IDevelopmentCommand
+  public interface IDevelopmentCommand
   {
-    public string Id { get { return id; } set { id = value; } }
+    string Id { get; set; }
 
-    public string Description { get { return description; } set { description = value; } }
+    string Description { get; set; }
 
-    [SerializeField]
-    private string id;
-
-    [SerializeField]
-    private string description;
-
-    public abstract bool Execute(string[] args);
+    bool Execute(string[] args);
   }
 }

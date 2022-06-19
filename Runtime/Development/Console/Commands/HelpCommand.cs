@@ -15,19 +15,19 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
+using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
 {
-  public abstract class DevelopmentCommandBase
+  /// <summary>
+  /// 
+  /// </summary>
+  [CreateAssetMenu(fileName = "Help", menuName = "Game:Work/Development/Command")]
+  public class HelpCommand : DevelopmentCommand
   {
-    public string Id { get; set; }
-
-    public string Description { get; set; }
-
-    public DevelopmentCommandBase(string id, string description)
+    public override bool Execute(string[] args)
     {
-      Id = id.ToLower();
-      Description = description;
+      return false;
     }
   }
 }
