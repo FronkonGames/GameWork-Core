@@ -31,14 +31,10 @@ namespace FronkonGames.GameWork.Core
     /// <summary>
     /// During the awake, this system will start the initialization.
     /// </summary>
-    private void Awake()
-    {
-    }
+    private void Awake() { }
 
     // This function is called when the object becomes enabled and active.
-    private void OnEnable()
-    {
-    }
+    private void OnEnable() { }
 
     /// <summary>
     /// This function is called when the behaviour becomes disabled or inactive.
@@ -206,7 +202,7 @@ namespace FronkonGames.GameWork.Core
     private void OnDrawGizmos()
     {
       for (int i = 0; i < GUIables.Count; ++i)
-        GUIables[i].OnDrawGizmos();
+        GUIables[i].OnGizmos();
     }
 #endif
 

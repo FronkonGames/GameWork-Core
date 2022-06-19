@@ -14,20 +14,25 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
 using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// 
+  /// Close console.
   /// </summary>
-  [CreateAssetMenu(fileName = "Help", menuName = "Game:Work/Development/Command")]
-  public class HelpCommand : DevelopmentCommand
+  [CreateAssetMenu(fileName = "Close", menuName = "Game:Work/Development/Command/Close")]
+  public class CloseCommand : DevelopmentCommand
   {
-    public override bool Execute(string[] args)
+    private DevelopmentConsole console;
+
+    public override void Execute(string[] args)
     {
-      return false;
+      if (console == null)
+        console = FindObjectOfType<DevelopmentConsole>();
+
+      if (console != null)
+        console.Show = false;
     }
   }
 }

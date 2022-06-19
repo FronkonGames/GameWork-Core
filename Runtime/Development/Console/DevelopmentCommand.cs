@@ -24,9 +24,9 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public abstract class DevelopmentCommand : ScriptableObject, IDevelopmentCommand
   {
-    public string Id { get { return id; } set { id = value; } }
+    public string Id { get => id; set => id = value; }
 
-    public string Description { get { return description; } set { description = value; } }
+    public string Description { get => description; set => description = value; }
 
     [SerializeField]
     private string id;
@@ -34,6 +34,6 @@ namespace FronkonGames.GameWork.Core
     [SerializeField]
     private string description;
 
-    public abstract bool Execute(string[] args);
+    public abstract void Execute(string[] args);
   }
 }

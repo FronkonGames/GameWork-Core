@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FronkonGames.GameWork.Foundation;
+using UnityEditor;
 
 namespace FronkonGames.GameWork.Core
 {
@@ -25,13 +26,24 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public class DevelopmentConsole : MonoBehaviourModule,
                                     IInitializable,
+                                    IUpdatable,
                                     IGUI
   {
     /// <summary>
     /// Show console.
     /// </summary>
     /// <value>Value</value>
-    public bool Show { get; set; }
+    public bool Show
+    {
+      get => show;
+      set
+      {
+        if (value == true && show == false)
+          needFocus = true;
+
+        show = value;
+      }
+    }
 
     /// <summary>
     /// Is it initialized?
@@ -39,40 +51,69 @@ namespace FronkonGames.GameWork.Core
     /// <value>Value</value>
     public bool Initialized { get; set; }
 
+    /// <summary>
+    /// Should be updated?
+    /// </summary>
+    /// <value>True/false.</value>
+    public bool ShouldUpdate { get; set; } = true;
+
     [SerializeField]
     private KeyCode showKey = KeyCode.Backslash;
 
     [SerializeField]
     private List<DevelopmentCommand> commands = new List<DevelopmentCommand>();
 
+    private bool show;
+    private string input;
+    private float lastInputTime = -1.0f;
+    private Vector2 scroll;
+    private bool needFocus = true;
+
+    private const string TextInputName = "ConsoleTextInput";
+
     /// <summary>
     /// When initialize.
     /// </summary>
-    public void OnInitialize()
-    {
-    }
+    public void OnInitialize() { }
 
     /// <summary>
     /// At the end of initialization.
     /// Called in the first Update frame.
     /// </summary>
-    public void OnInitialized()
-    {
-    }
+    public void OnInitialized() { }
 
     /// <summary>
     /// When deinitialize.
     /// </summary>
-    public void OnDeinitialize()
+    public void OnDeinitialize() { }
+
+    /// <summary>
+    /// Update event.
+    /// </summary>
+    public void OnUpdate() { }
+
+    /// <summary>
+    /// FixedUpdate event.
+    /// </summary>
+    public void OnFixedUpdate() { }
+
+    /// <summary>
+    /// LateUpdate event.
+    /// </summary>
+    public void OnLateUpdate()
     {
+      if (Show == false && AcceptNewInput() == true && Input.GetKeyUp(showKey) == true)
+      {
+        lastInputTime = Time.time;
+
+        Show = true;
+      }
     }
 
     /// <summary>
-    /// Ondrawgizmos event.
+    /// OnDrawGizmos event.
     /// </summary>
-    public void OnDrawGizmos()
-    {
-    }
+    public void OnGizmos() { }
 
     /// <summary>
     /// OnGUI event.
@@ -81,6 +122,82 @@ namespace FronkonGames.GameWork.Core
     {
       if (Show == true)
       {
+        ProcessInput();
+        
+        ConsoleGUI();
+      }
+    }
+
+    private bool AcceptNewInput() => Time.time - lastInputTime > 0.1f;
+    
+    private void ConsoleGUI()
+    {
+      GUILayout.BeginArea(new Rect(5, 5, Screen.width - 10, 28), GUI.skin.box);
+      {
+        GUILayout.BeginHorizontal();
+        {
+          if (GUILayout.Button("Exec", GUILayout.Width(40)) == true)
+            ProcessCommand();
+
+          GUI.SetNextControlName(TextInputName);
+          input = GUILayout.TextField(input);
+
+          if (GUILayout.Button("X", GUILayout.Width(30)) == true)
+            Show = false;
+        }
+        GUILayout.EndHorizontal();
+      }
+      GUILayout.EndArea();
+      
+      if (needFocus == true)
+      {
+        GUI.FocusControl(TextInputName);
+
+        needFocus = false;
+      }      
+    }
+
+    private void ProcessInput()
+    {
+      UnityEngine.Event e = UnityEngine.Event.current;
+      if (e.type != EventType.Layout && e.type != EventType.Repaint)
+      {
+        if (e.keyCode == KeyCode.Return)
+        {
+          ProcessCommand();
+          e.Use();
+        }
+        else if (e.keyCode == KeyCode.Escape || e.keyCode == showKey)
+        {
+          Show = false;
+          e.Use();
+        }
+      }
+    }
+
+    private void ProcessCommand()
+    {
+      if (string.IsNullOrEmpty(input) == false)
+      {
+        string[] parts = input.Trim().ToLower().Split(' ');
+        if (parts.Length > 0)
+        {
+          string id = parts[0];
+          DevelopmentCommand command = null;
+
+          for (int i = 0; i < commands.Count && command == null; ++i)
+          {
+            if (id.Equals(commands[i].Id) == true)
+              command = commands[i];
+          }
+          
+          if (command != null)
+            command.Execute(parts.Sub(1, parts.Length - 1));
+          else
+            Log.Warning($"Invalid command '{id}'.");
+        }
+
+        input = string.Empty;
       }
     }
   }

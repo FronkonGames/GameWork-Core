@@ -27,6 +27,6 @@ namespace FronkonGames.GameWork.Core
 
     string Description { get; set; }
 
-    bool Execute(string[] args);
+    void Execute(string[] args);
   }
 }
