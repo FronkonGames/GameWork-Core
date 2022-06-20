@@ -192,7 +192,10 @@ namespace FronkonGames.GameWork.Core
           }
           
           if (command != null)
-            command.Execute(parts.Sub(1, parts.Length - 1));
+          {
+            if (command.Execute(parts.Sub(1, parts.Length - 1)) == false)
+              Log.Warning($"Error executing command '{id}'.");
+          }
           else
             Log.Warning($"Invalid command '{id}'.");
         }

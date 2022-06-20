@@ -25,8 +25,10 @@ namespace FronkonGames.GameWork.Core
   {
     string Id { get; set; }
 
+    string Usage { get; set; }
+
     string Description { get; set; }
 
-    void Execute(string[] args);
+    bool Execute(string[] args);
   }
 }

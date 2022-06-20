@@ -14,7 +14,6 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
 using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
@@ -26,14 +25,19 @@ namespace FronkonGames.GameWork.Core
   {
     public string Id { get => id; set => id = value; }
 
+    public string Usage { get => usage; set => usage = value; }
+
     public string Description { get => description; set => description = value; }
 
     [SerializeField]
     private string id;
 
     [SerializeField]
+    private string usage;
+
+    [SerializeField]
     private string description;
 
-    public abstract void Execute(string[] args);
+    public abstract bool Execute(string[] args);
   }
 }

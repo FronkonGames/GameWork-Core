@@ -24,15 +24,32 @@ namespace FronkonGames.GameWork.Core
   [CreateAssetMenu(fileName = "Close", menuName = "Game:Work/Development/Command/Close")]
   public class CloseCommand : DevelopmentCommand
   {
+    public CloseCommand()
+    {
+      Id = "close";
+      Usage = "close";
+      Description = "Close the development console.";
+    }
+
+    private DevelopmentConsole Console
+    {
+      get
+      {
+        if (console == null)
+          console = FindObjectOfType<DevelopmentConsole>();
+
+        return console;
+      }
+    }
+
     private DevelopmentConsole console;
 
-    public override void Execute(string[] args)
+    public override bool Execute(string[] args)
     {
-      if (console == null)
-        console = FindObjectOfType<DevelopmentConsole>();
+      if (Console != null)
+        Console.Show = false;
 
-      if (console != null)
-        console.Show = false;
+      return Console != null;
     }
   }
 }
