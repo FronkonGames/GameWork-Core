@@ -17,7 +17,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FronkonGames.GameWork.Foundation;
-using UnityEditor;
 
 namespace FronkonGames.GameWork.Core
 {
@@ -68,6 +67,9 @@ namespace FronkonGames.GameWork.Core
     private float lastInputTime = -1.0f;
     private Vector2 scroll;
     private bool needFocus = true;
+
+    private List<string> history = new List<string>();
+    private int historyPointer = 0;
 
     private const string TextInputName = "ConsoleTextInput";
 
@@ -136,9 +138,6 @@ namespace FronkonGames.GameWork.Core
       {
         GUILayout.BeginHorizontal();
         {
-          if (GUILayout.Button("Exec", GUILayout.Width(40)) == true)
-            ProcessCommand();
-
           GUI.SetNextControlName(TextInputName);
           input = GUILayout.TextField(input);
 
@@ -167,6 +166,18 @@ namespace FronkonGames.GameWork.Core
           ProcessCommand();
           e.Use();
         }
+        else if (e.keyCode == KeyCode.DownArrow && history.Count > 0 && historyPointer > 0)
+        {
+          historyPointer--;
+          input = history[historyPointer];
+          e.Use();
+        }
+        else if (e.keyCode == KeyCode.UpArrow && historyPointer < history.Count)
+        {
+          input = history[historyPointer];
+          historyPointer++;
+          e.Use();
+        }
         else if (e.keyCode == KeyCode.Escape || e.keyCode == showKey)
         {
           Show = false;
@@ -179,6 +190,11 @@ namespace FronkonGames.GameWork.Core
     {
       if (string.IsNullOrEmpty(input) == false)
       {
+        input = input.Trim();
+        
+        history.Add(input);
+        historyPointer = 0;
+
         string[] parts = input.Trim().ToLower().Split(' ');
         if (parts.Length > 0)
         {

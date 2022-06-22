@@ -15,6 +15,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using UnityEngine;
+using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
@@ -27,7 +28,7 @@ namespace FronkonGames.GameWork.Core
     public GameObjectCommand()
     {
       Id = "gameobject";
-      Usage = "gameobject name [destroy|activate|deactivate|move]";
+      Usage = "gameobject name [destroy|activate|deactivate|move|rotate]";
       Description = "Operations on GameObjects.";
     }
 
@@ -74,11 +75,33 @@ namespace FronkonGames.GameWork.Core
                   float.TryParse(components[2], out position.z);
 
                   gameObject.transform.position = position;
+                  return true;
                 }
               }
-              return true;
+              break;
+
+            case "rotate":
+              if (args.Length == 3)
+              {
+                string[] components = args[2].Split(',');
+                if (components.Length == 3)
+                {
+                  Vector3 euler = Vector3.zero;
+                  float.TryParse(components[0], out euler.x);
+                  float.TryParse(components[1], out euler.y);
+                  float.TryParse(components[2], out euler.z);
+
+                  gameObject.transform.Rotate(Vector3.right, euler.x);
+                  gameObject.transform.Rotate(Vector3.up, euler.y);
+                  gameObject.transform.Rotate(Vector3.forward, euler.z);
+                  return true;
+                }
+              }
+              break;
           }
         }
+        else
+          Log.Warning($"GameObject '{name}' not found.");
       }
 
       return false;
