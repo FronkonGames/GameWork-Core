@@ -23,7 +23,7 @@ namespace FronkonGames.GameWork.Core
   /// Inject attribute.
   /// </summary>
   [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-  public sealed class InjectAttribute : BaseAttribute
+  public sealed class InjectAttribute : Attribute
   {
     public readonly SearchIn mode = SearchIn.Container;
 
