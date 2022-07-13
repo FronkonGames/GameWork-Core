@@ -65,7 +65,7 @@ namespace FronkonGames.GameWork.Core
       if (this.Initialized == false || sceneLoaded == true)
       {
         if (this.Initialized == false)
-          ResolveChidsDependencies();
+          ResolveChildsDependencies();
 
         ResolveLoadedSceneDependencies();
 

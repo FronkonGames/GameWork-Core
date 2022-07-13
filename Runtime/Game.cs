@@ -112,7 +112,7 @@ namespace FronkonGames.GameWork.Core
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     private static void OnBeforeSplashScreen()
     {
-      if (Game.IsCreated == true)
+      if (FindObjectOfType<Game>() != null)
         Game.Instance.EntryPoint(); 
     }
 

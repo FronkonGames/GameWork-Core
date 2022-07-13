@@ -34,7 +34,7 @@ namespace FronkonGames.GameWork.Core
     protected IDependencyContainer sceneDependencyContainer;
     protected IDependencyContainer childDependencyContainer;
 
-    private void ResolveChidsDependencies()
+    private void ResolveChildsDependencies()
     {
 #if ENABLE_PROFILING
       using (Profiling.Time("Resolve childs dependencies"))
