@@ -17,7 +17,7 @@
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
-  /// Draw in Ondrawgizmos and/or OnGUI.
+  /// Draw in OnDrawGizmos and/or OnGUI.
   /// </summary>
   public interface IGUI : IModule
   {
