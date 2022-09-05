@@ -29,17 +29,17 @@ namespace FronkonGames.GameWork.Core
                                        IUpdatable,
                                        IDestructible
   {
-    private readonly FastList<IInitializable> initializables = new FastList<IInitializable>();
-    private readonly FastList<IActivable> activables = new FastList<IActivable>();
-    private readonly FastList<IUpdatable> updatables = new FastList<IUpdatable>();
-    private readonly FastList<IGUI> GUIables = new FastList<IGUI>();
-    private readonly FastList<IRenderObject> renderableObjects = new FastList<IRenderObject>();
-    private readonly FastList<IDestructible> destructibles = new FastList<IDestructible>();
-    private readonly FastList<ISceneLoad> sceneLoads = new FastList<ISceneLoad>();
+    private readonly List<IInitializable> initializables = new();
+    private readonly List<IActivable> activables = new();
+    private readonly List<IUpdatable> updatables = new();
+    private readonly List<IGUI> GUIables = new();
+    private readonly List<IRenderObject> renderableObjects = new();
+    private readonly List<IDestructible> destructibles = new();
+    private readonly List<ISceneLoad> sceneLoads = new();
 #if UNITY_ANDROID || UNITY_IOS
-    private readonly FastList<ILowMemory> lowMemories = new FastList<ILowMemory>();
+    private readonly List<ILowMemory> lowMemories = new();
 #endif
-    private readonly FastList<IModule> allModules = new FastList<IModule>();
+    private readonly List<IModule> allModules = new();
 
     /// <summary>
     /// Register modules. Only allowed in OnInitialize.
