@@ -18,9 +18,10 @@
 
 ## 🔧 Requisites
 
-- Unity 2021.2 or higher.
+- Unity 2021.3 or higher.
 - [Game:Work Foundation](https://github.com/FronkonGames/GameWork-Foundation).
-- Test Framework 1.1.31 or higher.
+- [Game:Work Core](https://github.com/FronkonGames/GameWork-Core).
+- Addressables 1.19.19 or higher.
 
 ## 🚀 Installation
 

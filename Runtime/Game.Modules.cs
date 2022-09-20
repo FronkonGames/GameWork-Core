@@ -147,35 +147,35 @@ namespace FronkonGames.GameWork.Core
       return modules;
     }
 
-    private void RegisterModule(object obj)
+    private void RegisterModule(object module)
     {
-      Type type = obj.GetType();
+      Type type = module.GetType();
 
       if (typeof(IInitializable).IsAssignableFrom(type) == true)
       {
-        IInitializable initializable = obj as IInitializable;
+        IInitializable initializable = module as IInitializable;
         initializable.OnInitialize();
 
         initializables.Add(initializable);
       }
 
       if (typeof(IActivable).IsAssignableFrom(type) == true)
-        activables.Add(obj as IActivable);
+        activables.Add(module as IActivable);
 
       if (typeof(IUpdatable).IsAssignableFrom(type) == true)
-        updatables.Add(obj as IUpdatable);
+        updatables.Add(module as IUpdatable);
 
       if (typeof(IGUI).IsAssignableFrom(type) == true)
-        GUIables.Add(obj as IGUI);
+        GUIables.Add(module as IGUI);
 
       if (typeof(IRenderObject).IsAssignableFrom(type) == true)
-        renderableObjects.Add(obj as IRenderObject);
+        renderableObjects.Add(module as IRenderObject);
 
       if (typeof(IDestructible).IsAssignableFrom(type) == true)
-        destructibles.Add(obj as IDestructible);
+        destructibles.Add(module as IDestructible);
 
       if (typeof(ISceneLoad).IsAssignableFrom(type) == true)
-        sceneLoads.Add(obj as ISceneLoad);
+        sceneLoads.Add(module as ISceneLoad);
 
 #if UNITY_ANDROID || UNITY_IOS
       if (typeof(ILowMemory).IsAssignableFrom(type) == true)
@@ -183,7 +183,7 @@ namespace FronkonGames.GameWork.Core
 #endif
 
       if (typeof(IModule).IsAssignableFrom(type) == true)
-        allModules.Add(obj as IModule);
+        allModules.Add(module as IModule);
       else
         Log.Error($"Object '{type.Name}' is not a valid module");
     }

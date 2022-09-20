@@ -16,14 +16,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
 using FronkonGames.GameWork.Foundation;
+using UnityEngine.Scripting;
 
 namespace FronkonGames.GameWork.Core
 {
   /// <summary>
   /// Inject attribute.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-  public sealed class InjectAttribute : Attribute
+  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+  public sealed class InjectAttribute : PreserveAttribute
   {
     public readonly SearchIn mode = SearchIn.Container;
 
