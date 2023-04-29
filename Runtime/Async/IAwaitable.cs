@@ -17,15 +17,11 @@
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
+  /// <summary> Awater interface. </summary>
   public interface IAwaitable
   {
-    /// <summary>
-    /// .
-    /// </summary>
-    /// <returns></returns>
+    /// <summary> Get Awaiter. </summary>
+    /// <returns>Awaiter interface</returns>
     IAwaiter GetAwaiter();
   }
 }

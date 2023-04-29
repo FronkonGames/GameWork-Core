@@ -17,9 +17,7 @@
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Dependencies search modes.
-  /// </summary>
+  /// <summary> Dependencies search modes. </summary>
   public enum SearchIn
   {
     ///<summary>Find dependencies registered in a container (default).</summary>

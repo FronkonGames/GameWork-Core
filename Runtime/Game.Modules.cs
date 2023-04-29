@@ -21,29 +21,26 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
-  public abstract partial class Game : MonoBehaviourSingleton<Game>,
+  /// <summary> Module manager and persistent singleton. </summary>
+  public abstract partial class Game : PersistentMonoBehaviourSingleton<Game>,
                                        IInitializable,
                                        IUpdatable,
                                        IDestructible
   {
-    private readonly List<IInitializable> initializables = new();
-    private readonly List<IActivable> activables = new();
-    private readonly List<IUpdatable> updatables = new();
-    private readonly List<IGUI> GUIables = new();
-    private readonly List<IRenderObject> renderableObjects = new();
-    private readonly List<IDestructible> destructibles = new();
-    private readonly List<ISceneLoad> sceneLoads = new();
+    private readonly ArrayList<IInitializable> initializables = new();
+    private readonly ArrayList<IActivable> activables = new();
+    private readonly ArrayList<IUpdatable> updatables = new();
+    private readonly ArrayList<IGUI> GUIables = new();
+    private readonly ArrayList<IRenderObject> renderableObjects = new();
+    private readonly ArrayList<IDestructible> destructibles = new();
+    private readonly ArrayList<ISceneLoad> sceneLoads = new();
 #if UNITY_ANDROID || UNITY_IOS
-    private readonly List<ILowMemory> lowMemories = new();
+    private readonly ArrayList<ILowMemory> lowMemories = new();
 #endif
-    private readonly List<IModule> allModules = new();
+    private readonly ArrayList<IModule> allModules = new();
 
-    /// <summary>
-    /// Register modules. Only allowed in OnInitialize.
-    /// </summary>
+    /// <summary> Register modules. </summary>
+    /// <remarks> Only allowed in OnInitialize. </remarks>
     /// <param name="object">List of modules.</param>
     public void RegisterModule(params object[] modules)
     {
@@ -54,9 +51,8 @@ namespace FronkonGames.GameWork.Core
         RegisterModule(modules[i]);
     }
 
-    /// <summary>
-    /// Register modules by type and create them.
-    /// </summary>
+    /// <summary> Register modules by type and create them. </summary>
+    /// <remarks> Only allowed in OnInitialize. </remarks>
     /// <param name="types">Types of modules.</param>
     public void RegisterModule(params Type[] types)
     {
@@ -86,9 +82,7 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    /// <summary>
-    /// Unregister modules.
-    /// </summary>
+    /// <summary> Unregister modules. </summary>
     /// <param name="modules">Listado de modulos.</param>
     public void UnregisterModule(params object[] modules)
     {
@@ -96,9 +90,7 @@ namespace FronkonGames.GameWork.Core
         UnregisterModule(modules[i]);
     }
 
-    /// <summary>
-    /// The module is registered?
-    /// </summary>
+    /// <summary> The module is registered? </summary>
     /// <typeparam name="T">Type of module.</typeparam>
     /// <returns>True if you are registered.</returns>
     public bool HasModule<T>() where T : IModule
@@ -112,36 +104,32 @@ namespace FronkonGames.GameWork.Core
       return false;
     }
 
-    /// <summary>
-    /// Returns the first module of a type (or null).
-    /// </summary>
+    /// <summary> Returns the first module of a type (or null). </summary>
     /// <typeparam name="T">Module type</typeparam>
     /// <returns>Module or null</returns>
     public T GetModule<T>() where T : IModule
     {
       for (int i = 0; i < allModules.Count; ++i)
       {
-        if (allModules[i] is T)
-          return (T)allModules[i];
+        if (allModules[i] is T t)
+          return t;
       }
 
       Log.Error($"Module {typeof(T).Name} not register");
 
-      return default(T);
+      return default;
     }
 
-    /// <summary>
-    /// Returns all modules of a type (or empty).
-    /// </summary>
+    /// <summary> Returns all modules of a type (or empty). </summary>
     /// <typeparam name="T">Module type</typeparam>
     /// <returns>List of modules</returns>
     public List<T> GetModules<T>() where T : IModule
     {
-      List<T> modules = new List<T>();
+      List<T> modules = new();
       for (int i = 0; i < allModules.Count; ++i)
       {
-        if (allModules[i] is T)
-          modules.Add((T)allModules[i]);
+        if (allModules[i] is T t)
+          modules.Add(t);
       }
 
       return modules;

@@ -16,9 +16,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Module interface.
-  /// </summary>
+  /// <summary> Module interface. </summary>
   public interface IModule
   {
   }

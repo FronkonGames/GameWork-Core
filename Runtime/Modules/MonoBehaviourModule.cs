@@ -18,9 +18,7 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// BaseMonoBehaviour module.
-  /// </summary>
+  /// <summary> BaseMonoBehaviour module. </summary>
   public abstract class MonoBehaviourModule : BaseMonoBehaviour, IModule
   {
   }

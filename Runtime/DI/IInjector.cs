@@ -17,31 +17,21 @@
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Injector interface.
-  /// </summary>
+  /// <summary> Injector interface. </summary>
   public interface IInjector
   {
-    /// <summary>
-    /// Add a dependencies container.
-    /// </summary>
+    /// <summary> Add a dependencies container. </summary>
     /// <param name="container">Dependency container</param>
     void AddContainer(IDependencyContainer container);
 
-    /// <summary>
-    /// Remove a dependencies container.
-    /// </summary>
+    /// <summary> Remove a dependencies container. </summary>
     /// <param name="container">Dependency container</param>
     void RemoveContainer(IDependencyContainer container);
 
-    /// <summary>
-    /// Remove all dependencies containers.
-    /// </summary>
+    /// <summary> Remove all dependencies containers. </summary>
     void RemoveAllContainers();
 
-    /// <summary>
-    /// Look for 'Inject' attributes and injects available objects in the container.
-    /// </summary>
+    /// <summary> Look for 'Inject' attributes and injects available objects in the container. </summary>
     /// <param name="target">Target.</param>
     void Resolve(object target);
   }

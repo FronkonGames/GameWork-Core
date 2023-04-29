@@ -15,24 +15,22 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using UnityEngine;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
+  /// <summary> Awaiter callback. </summary>
   public class CallbackAwaiter : IAwaiter
   {
     private bool completed;
     private Action continuation;
 
+    /// <summary> Is completed? </summary>
     public bool IsCompleted => completed;
 
     public void GetResult() { }
 
+    /// <summary> Upon completion. </summary>
+    /// <param name="continuation">Next action.</param>
     public void OnCompleted(Action continuation)
     {
       if (completed)
@@ -41,6 +39,7 @@ namespace FronkonGames.GameWork.Core
         this.continuation += continuation;
     }
 
+    /// <summary> Awaiter completed. </summary>
     public void Complete()
     {
       completed = true;

@@ -14,28 +14,18 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using UnityEngine;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
+  /// <summary> Callback task. </summary>
   public class CallbackTask : IAwaitable
   {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
+    /// <summary> Get Awaiter. </summary>
+    /// <returns>Awaiter.</returns>
     public CallbackAwaiter Awaiter { get; } = new CallbackAwaiter();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
+    /// <summary> Get Awaiter. </summary>
+    /// <returns>Awaiter interface</returns>
     public IAwaiter GetAwaiter() => Awaiter;
   }
 }

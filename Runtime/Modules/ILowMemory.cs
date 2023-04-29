@@ -22,9 +22,7 @@ namespace FronkonGames.GameWork.Core
   /// </summary>
   public interface ILowMemory : IModule
   {
-    /// <summary>
-    /// Low memory event.
-    /// </summary>
+    /// <summary> Low memory event. </summary>
     void OnLowMemory();
   }
 }

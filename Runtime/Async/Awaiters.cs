@@ -19,28 +19,20 @@ using System.Threading.Tasks;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
+  /// <summary> Custom async Awaiters. </summary>
   public static class Awaiters
   {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public static async Task NextUpdate() => await (Game.Instance.NextUpdate ?? (Game.Instance.NextUpdate = new CallbackTask()));
+    /// <summary> Wait for the next Update. </summary>
+    /// <returns>Task</returns>
+    public static async Task NextUpdate() => await (Game.Instance.NextUpdate ??= new CallbackTask());
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public static async Task NextFixedUpdate() => await (Game.Instance.NextFixedUpdate ?? (Game.Instance.NextFixedUpdate = new CallbackTask()));
+    /// <summary> Wait for the next FixedUpdate. </summary>
+    /// <returns>Task.</returns>
+    public static async Task NextFixedUpdate() => await (Game.Instance.NextFixedUpdate ??= new CallbackTask());
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="seconds"></param>
-    /// <returns></returns>
+    /// <summary> Wait a few seconds. </summary>
+    /// <param name="seconds">Seconds to wait.</param>
+    /// <returns>Task.</returns>
     public static async Task Seconds(float seconds)
     {
       while (seconds >= 0.0f)
@@ -49,6 +41,6 @@ namespace FronkonGames.GameWork.Core
 
         seconds -= Time.deltaTime;
       }
-    }    
+    }
   }
 }

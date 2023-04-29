@@ -16,19 +16,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Draw in OnDrawGizmos and/or OnGUI.
-  /// </summary>
+  /// <summary> Draw in OnDrawGizmos and/or OnGUI. </summary>
   public interface IGUI : IModule
   {
-    /// <summary>
-    /// OnDrawGizmos event.
-    /// </summary>
+    /// <summary> OnDrawGizmos event. </summary>
     void OnGizmos();
 
-    /// <summary>
-    /// OnGUI event.
-    /// </summary>
+    /// <summary> OnGUI event. </summary>
     void OnGUI();
   }
 }

@@ -16,25 +16,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// It can be activated and deactivated.
-  /// </summary>
+  /// <summary> It can be activated and deactivated. </summary>
   public interface IActivable : IModule
   {
-    /// <summary>
-    /// It is activated?
-    /// </summary>
+    /// <summary> It is activated? </summary>
     /// <value>True if it is activated</value>
     bool Activated { get; set; }
 
-    /// <summary>
-    /// When activated.
-    /// </summary>
+    /// <summary> When activated. </summary>
     void OnActivated();
 
-    /// <summary>
-    /// When deactivating.
-    /// </summary>
+    /// <summary> When deactivating. </summary>
     void OnDeactivated();
   }
 }

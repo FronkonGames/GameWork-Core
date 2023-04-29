@@ -16,14 +16,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Use OnRenderObject.
-  /// </summary>
+  /// <summary> Use OnRenderObject. </summary>
   public interface IRenderObject : IModule
   {
-    /// <summary>
-    /// OnRenderObject event.
-    /// </summary>
+    /// <summary> OnRenderObject event. </summary>
     void OnRenderObject();
   }
 }

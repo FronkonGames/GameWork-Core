@@ -16,20 +16,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Puede destruirse.
-  /// </summary>
+  /// <summary> It can be destroyed. </summary>
   public interface IDestructible : IModule
   {
-    /// <summary>
-    /// Va a destruirse?
-    /// </summary>
-    /// <value>True si va a destruirse.</value>
+    /// <summary> Will it be destroyed? </summary>
+    /// <value>True if it is to be destroyed.</value>
     bool WillDestroy { get; set; }
 
-    /// <summary>
-    /// Al destruirse.
-    /// </summary>
+    /// <summary> When destroyed. </summary>
     void OnWillDestroy();
   }
 }

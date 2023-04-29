@@ -16,20 +16,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// It can initialize and disincialize.
-  /// </summary>
+  /// <summary> It can initialize and disincialize. </summary>
   public interface IInitializable : IModule
   {
-    /// <summary>
-    /// Is it initialized?
-    /// </summary>
+    /// <summary> Is it initialized? </summary>
     /// <value>Value</value>
     bool Initialized { get; set; }
 
-    /// <summary>
-    /// When initialize.
-    /// </summary>
+    /// <summary> When initialize. </summary>
     void OnInitialize();
 
     /// <summary>
@@ -38,9 +32,7 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     void OnInitialized();
 
-    /// <summary>
-    /// When deinitialize.
-    /// </summary>
+    /// <summary> When deinitialize. </summary>
     void OnDeinitialize();
   }
 }

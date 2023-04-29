@@ -20,25 +20,19 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
-  public abstract partial class Game : MonoBehaviourSingleton<Game>,
+  /// <summary> Module manager and persistent singleton. </summary>
+  public abstract partial class Game : PersistentMonoBehaviourSingleton<Game>,
                                        IInitializable,
                                        IUpdatable,
                                        IDestructible
   {
-    /// <summary>
-    /// During the awake, this system will start the initialization.
-    /// </summary>
+    /// <summary> During the awake, this system will start the initialization. </summary>
     private void Awake() { }
 
-    // This function is called when the object becomes enabled and active.
+    /// <summary> This function is called when the object becomes enabled and active. </summary>
     private void OnEnable() { }
 
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
+    /// <summary> This function is called when the behaviour becomes disabled or inactive. </summary>
     private void OnDisable()
     {
       for (int i = 0; i < initializables.Count; ++i)
@@ -57,9 +51,7 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    /// <summary> Update is called every frame, if the MonoBehaviour is enabled. </summary>
     private void Update()
     {
       if (this.Initialized == false || sceneLoaded == true)
@@ -106,9 +98,7 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    /// <summary>
-    /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    /// <summary> This function is called every fixed framerate frame, if the MonoBehaviour is enabled. </summary>
     private void FixedUpdate()
     {
       if (ShouldUpdate == true && this.WillDestroy == false)
@@ -148,19 +138,15 @@ namespace FronkonGames.GameWork.Core
       }
     }
 
-    /// <summary>
-    /// OnRenderObject is called after camera has rendered the scene.
-    /// </summary>
+    /// <summary> OnRenderObject is called after camera has rendered the scene. </summary>
     private void OnRenderObject()
     {
       for (int i = 0; i < renderableObjects.Count; ++i)
         renderableObjects[i].OnRenderObject();
     }
 
-    /// <summary>
-    /// This function is called when the MonoBehaviour will be destroyed.
-    /// </summary>
-    private void OnDestroy()
+    /// <summary> This function is called when the MonoBehaviour will be destroyed. </summary>
+    protected override void OnDestroy()
     {
       SceneManager.sceneLoaded -= OnSceneLoaded;
       SceneManager.sceneUnloaded -= OnSceneUnloaded;
@@ -193,12 +179,12 @@ namespace FronkonGames.GameWork.Core
       Application.lowMemory -= OnLowMemory;
 #endif
       Application.wantsToQuit -= OnWantsToQuit;
+
+      base.OnDestroy();
     }
 
 #if UNITY_EDITOR
-    /// <summary>
-    /// Callback to draw gizmos that are pickable and always drawn.
-    /// </summary>
+    /// <summary> Callback to draw gizmos that are pickable and always drawn. </summary>
     private void OnDrawGizmos()
     {
       for (int i = 0; i < GUIables.Count; ++i)
@@ -206,18 +192,14 @@ namespace FronkonGames.GameWork.Core
     }
 #endif
 
-    /// <summary>
-    /// OnGUI is called for rendering and handling GUI events.
-    /// </summary>
+    /// <summary> OnGUI is called for rendering and handling GUI events. </summary>
     private void OnGUI()
     {
       for (int i = 0; i < GUIables.Count; ++i)
         GUIables[i].OnGUI();
     }
 
-    /// <summary>
-    /// Callback sent to all game objects before the application is quit.
-    /// </summary>
+    /// <summary> Callback sent to all game objects before the application is quit. </summary>
     private void OnApplicationQuit()
     {
       this.WillDestroy = true;
@@ -227,9 +209,7 @@ namespace FronkonGames.GameWork.Core
     }
 
 #if UNITY_ANDROID || UNITY_IOS
-    /// <summary>
-    /// This event occurs when your app receives a low-memory notification from the device it is running on.
-    /// </summary>
+    /// <summary> This event occurs when your app receives a low-memory notification from the device it is running on. </summary>
     private void OnLowMemory()
     {
       for (int i = 0; i < lowMemories.Count; ++i)

@@ -18,9 +18,7 @@ using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Serializable ScriptableObject module.
-  /// </summary>
+  /// <summary> Serializable ScriptableObject module. </summary>
   public abstract class ScriptableModule : ScriptableObject, IModule
   {
   }

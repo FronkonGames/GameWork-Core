@@ -18,20 +18,12 @@ using System.Runtime.CompilerServices;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
+  /// <summary> Awater interface. </summary>
   public interface IAwaiter : INotifyCompletion
   {
-    /// <summary>
-    /// .
-    /// </summary>
-    /// <value></value>
+    /// <summary> Is completed? </summary>
     bool IsCompleted { get; }
 
-    /// <summary>
-    /// .
-    /// </summary>
-    void GetResult();    
+    void GetResult();
   }
 }

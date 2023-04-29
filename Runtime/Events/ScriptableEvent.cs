@@ -18,19 +18,13 @@ using UnityEngine;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Scriptable event base.
-  /// </summary>
+  /// <summary> Scriptable event base. </summary>
   public abstract class ScriptableEvent : ScriptableObject
   {
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public abstract void Raise();
 
-    /// <summary>
-    /// Eliminate all event subscriptions.
-    /// </summary>
+    /// <summary> Eliminate all event subscriptions. </summary>
     public abstract void UnsubscribeAll();
   }
 }
