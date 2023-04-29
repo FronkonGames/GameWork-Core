@@ -15,13 +15,10 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Inject attribute.
-  /// </summary>
+  /// <summary> Inject attribute. </summary>
   [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
   public sealed class InjectAttribute : Attribute
   {

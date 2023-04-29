@@ -1,8 +1,8 @@
 {
   "name": "com.frokongames.gamework.core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "Game:Work Core",
-  "decription": "A modular framework with dependency injection.",
+  "decription": "A micro-kernel framework with dependency injection and event-driven communication.",
   "references": [ ],
   "unity": "2020.3",
   "unityRelease": "26f1",
@@ -15,7 +15,7 @@
   "autoReferenced": true,
   "defineConstraints": [],
   "dependencies":  {  },
-  "keywords": [ "unity", "gamedev", "framework", "game development" ],
+  "keywords": [ "unity", "gamedev", "framework", "game development", "gamework", "micro-kernel" ],
   "category": "Unity",
   "repository":
   {

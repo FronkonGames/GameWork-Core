@@ -42,7 +42,7 @@ public partial class InjectionTests
 
   public class BehaviourA : MonoBehaviour { }
  
-  public class BehaviourB : BaseMonoBehaviour
+  public class BehaviourB : CachedMonoBehaviour
   {
     public BehaviourA BehaviourA => behaviourA;
 
@@ -50,7 +50,7 @@ public partial class InjectionTests
     private BehaviourA behaviourA;
   }
 
-  public class MonoBehaviourInjectionTest : BaseMonoBehaviour
+  public class MonoBehaviourInjectionTest : CachedMonoBehaviour
   {
     public BehaviourA BehaviourA => behaviourA;
 

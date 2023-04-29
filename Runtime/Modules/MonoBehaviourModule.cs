@@ -18,10 +18,8 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// BaseMonoBehaviour module.
-  /// </summary>
-  public abstract class MonoBehaviourModule : BaseMonoBehaviour, IModule
+  /// <summary> CachedMonoBehaviour module. </summary>
+  public abstract class MonoBehaviourModule : CachedMonoBehaviour, IModule
   {
   }
 }

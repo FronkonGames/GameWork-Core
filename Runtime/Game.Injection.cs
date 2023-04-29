@@ -22,10 +22,8 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
-  public abstract partial class Game : MonoBehaviourSingleton<Game>,
+  /// <summary> Module manager and persistent singleton. </summary>
+  public abstract partial class Game : PersistentMonoBehaviourSingleton<Game>,
                                        IInitializable,
                                        IUpdatable,
                                        IDestructible
@@ -67,7 +65,7 @@ namespace FronkonGames.GameWork.Core
       {
         sceneDependencyContainer.Clear();
 
-        List<Component> monoBehaviours = new List<Component>();
+        List<Component> monoBehaviours = new();
         for (int i = 0; i < SceneManager.sceneCount; ++i)
         {
           Scene scene = SceneManager.GetSceneAt(i);

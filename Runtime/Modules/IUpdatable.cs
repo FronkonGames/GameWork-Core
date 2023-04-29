@@ -16,30 +16,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// It can be updated.
-  /// </summary>
+  /// <summary> It can be updated. </summary>
   public interface IUpdatable : IModule
   {
-    /// <summary>
-    /// Should be updated?
-    /// </summary>
+    /// <summary> Should be updated? </summary>
     /// <value>True/false.</value>
     bool ShouldUpdate { get; }
 
-    /// <summary>
-    /// Update event.
-    /// </summary>
+    /// <summary> Update event. </summary>
     void OnUpdate();
 
-    /// <summary>
-    /// FixedUpdate event.
-    /// </summary>
+    /// <summary> FixedUpdate event. </summary>
     void OnFixedUpdate();
 
-    /// <summary>
-    /// LateUpdate event.
-    /// </summary>
+    /// <summary> LateUpdate event. </summary>
     void OnLateUpdate();
   }
 }

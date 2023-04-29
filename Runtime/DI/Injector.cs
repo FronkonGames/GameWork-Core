@@ -21,16 +21,12 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Dependencies injector.
-  /// </summary>
+  /// <summary> Dependencies injector. </summary>
   public sealed class Injector : IInjector
   {
-    private List<IDependencyContainer> containers = new List<IDependencyContainer>();
+    private readonly List<IDependencyContainer> containers = new();
 
-    /// <summary>
-    /// Add a dependencies container.
-    /// </summary>
+    /// <summary> Add a dependencies container. </summary>
     /// <param name="container">Dependency container</param>
     public void AddContainer(IDependencyContainer container)
     {
@@ -40,9 +36,7 @@ namespace FronkonGames.GameWork.Core
         Log.Error("The container is already added");
     }
 
-    /// <summary>
-    /// Remove a dependencies container.
-    /// </summary>
+    /// <summary> Remove a dependencies container. </summary>
     /// <param name="container">Dependency container</param>
     public void RemoveContainer(IDependencyContainer container)
     {
@@ -52,14 +46,10 @@ namespace FronkonGames.GameWork.Core
         Log.Error("Container not found");
     }
 
-    /// <summary>
-    /// Remove all dependencies containers.
-    /// </summary>
+    /// <summary> Remove all dependencies containers. </summary>
     public void RemoveAllContainers() => containers.Clear();
 
-    /// <summary>
-    /// Look for 'Inject' attributes and injects available objects in the container.
-    /// </summary>
+    /// <summary> Look for 'Inject' attributes and injects available objects in the container. </summary>
     /// <param name="target">Target.</param>
     public void Resolve(object target)
     {
@@ -86,19 +76,19 @@ namespace FronkonGames.GameWork.Core
           {
             if (containers[i].Contains(fieldInfo.FieldType) == true)
             {
-              Log.Info($"'{target.ToString()}' inject with {fieldInfo.FieldType.ToString()}");
+              Log.Info($"'{target}' inject with {fieldInfo.FieldType}");
               fieldInfo.SetValue(target, containers[i].Get(fieldInfo.FieldType));
               dependencyFound = true;
               break;
             }
           }
-          
+
           if (dependencyFound == false)
             Log.Error($"Type '{fieldInfo.FieldType}' not registered");
         }
         else
         {
-          BaseMonoBehaviour monoBehaviour = target as BaseMonoBehaviour;
+          CachedMonoBehaviour monoBehaviour = target as CachedMonoBehaviour;
           if (monoBehaviour != null)
           {
             Component component = null;
@@ -111,14 +101,14 @@ namespace FronkonGames.GameWork.Core
 
             if (component != null)
             {
-              Log.Info($"'{target.ToString()}' inject with {component.ToString()}");
+              Log.Info($"'{target}' inject with {component}");
               fieldInfo.SetValue(target, component);
             }
             else
               Log.Error($"Type '{fieldInfo.FieldType}' not found in '{monoBehaviour.name}'");
           }
           else
-            Log.Error($"'{target}' is not a BaseMonoBehaviour");
+            Log.Error($"'{target}' is not a CachedMonoBehaviour");
         }
       }
     }
@@ -128,7 +118,7 @@ namespace FronkonGames.GameWork.Core
       InjectAttribute injectAttribute = propertyInfo.GetCustomAttribute<InjectAttribute>();
       if (injectAttribute != null)
       {
-        Log.Info($"Injecting '{target.ToString()}' {propertyInfo.PropertyType.ToString()}");
+        Log.Info($"Injecting '{target}' {propertyInfo.PropertyType}");
 
         if (injectAttribute.mode == SearchIn.Container)
         {
@@ -137,7 +127,7 @@ namespace FronkonGames.GameWork.Core
           {
             if (containers[i].Contains(propertyInfo.PropertyType) == true)
             {
-              Log.Info($"'{target.ToString()}' inject with {propertyInfo.PropertyType.ToString()}");
+              Log.Info($"'{target}' inject with {propertyInfo.PropertyType}");
               propertyInfo.SetValue(target, containers[i].Get(propertyInfo.PropertyType));
               dependencyFound = true;
               break;
@@ -149,7 +139,7 @@ namespace FronkonGames.GameWork.Core
         }
         else
         {
-          BaseMonoBehaviour monoBehaviour = target as BaseMonoBehaviour;
+          CachedMonoBehaviour monoBehaviour = target as CachedMonoBehaviour;
           if (monoBehaviour != null)
           {
             Component component = null;
@@ -162,14 +152,14 @@ namespace FronkonGames.GameWork.Core
 
             if (component != null)
             {
-              Log.Info($"'{target.ToString()}' inject with {component.ToString()}");
+              Log.Info($"'{target}' inject with {component}");
               propertyInfo.SetValue(target, component);
             }
             else
               Log.Error($"Type '{propertyInfo.PropertyType}' not found in '{monoBehaviour.name}'");
           }
           else
-            Log.Error($"'{target}' is not a BaseMonoBehaviour");
+            Log.Error($"'{target}' is not a CachedMonoBehaviour");
         }
       }
     }

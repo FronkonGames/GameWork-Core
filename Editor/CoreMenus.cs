@@ -19,15 +19,11 @@ using UnityEditor;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Core menus.
-  /// </summary>
+  /// <summary> Core menus. </summary>
   public static class CoreMenus
   {
-    /// <summary>
-    /// Open the repository.
-    /// </summary>
-    [MenuItem("Help/Game:Work/Core/Open repository")]
+    /// <summary> Open the repository. </summary>
+    [MenuItem("Help/Fronkon Games/Game:Work/Core/Open repository")]
     public static void OpenRepository() => Application.OpenURL("https://github.com/FronkonGames/GameWork-Core");
   }
 }

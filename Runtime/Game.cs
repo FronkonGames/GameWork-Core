@@ -20,38 +20,28 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// .
-  /// </summary>
-  public abstract partial class Game : MonoBehaviourSingleton<Game>,
+  /// <summary> Module manager and persistent singleton. </summary>
+  public abstract partial class Game : PersistentMonoBehaviourSingleton<Game>,
                                        IInitializable,
                                        IUpdatable,
                                        IDestructible
   {
-    /// <summary>
-    /// Initialized?
-    /// </summary>
+    /// <summary> Initialized? </summary>
     /// <value>True/false.</value>
     public bool Initialized { get; set; }
 
-    /// <summary>
-    /// Should be updated?
-    /// </summary>
+    /// <summary> Should be updated? </summary>
     /// <value>True/false.</value>
     public bool ShouldUpdate { get; set; } = true;
 
-    /// <summary>
-    /// Will it be destroyed?
-    /// </summary>
+    /// <summary> Will it be destroyed? </summary>
     /// <value>True si va a destruirse.</value>
     public bool WillDestroy { get; set; }
 
     public CallbackTask NextUpdate { get; set; }
     public CallbackTask NextFixedUpdate { get; set; }
 
-    /// <summary>
-    /// On initialize.
-    /// </summary>
+    /// <summary> On initialize. </summary>
     public virtual void OnInitialize() { }
 
     /// <summary>
@@ -60,29 +50,19 @@ namespace FronkonGames.GameWork.Core
     /// </summary>
     public virtual void OnInitialized() { }
 
-    /// <summary>
-    /// On deinitialize.
-    /// </summary>
+    /// <summary> On deinitialize. </summary>
     public virtual void OnDeinitialize() { }
 
-    /// <summary>
-    /// Update event.
-    /// </summary>
+    /// <summary> Update event. </summary>
     public virtual void OnUpdate() { }
 
-    /// <summary>
-    /// FixedUpdate event.
-    /// </summary>
+    /// <summary> FixedUpdate event. </summary>
     public virtual void OnFixedUpdate() { }
 
-    /// <summary>
-    /// LateUpdate event.
-    /// </summary>
+    /// <summary> LateUpdate event. </summary>
     public virtual void OnLateUpdate() { }
 
-    /// <summary>
-    /// On destroy.
-    /// </summary>
+    /// <summary> On destroy. </summary>
     public virtual void OnWillDestroy() { }
 
     private bool sceneLoaded;
@@ -105,7 +85,6 @@ namespace FronkonGames.GameWork.Core
 #if UNITY_ANDROID || UNITY_IOS
       Application.lowMemory += OnLowMemory;
 #endif
-
       this.OnInitialize();
     }
 
@@ -113,7 +92,7 @@ namespace FronkonGames.GameWork.Core
     private static void OnBeforeSplashScreen()
     {
       if (FindObjectOfType<Game>() != null)
-        Game.Instance.EntryPoint(); 
+        Game.Instance.EntryPoint();
     }
 
     private void OnSceneLoaded(Scene current, LoadSceneMode mode)
@@ -132,7 +111,7 @@ namespace FronkonGames.GameWork.Core
 
     private bool OnWantsToQuit()
     {
-      // @HACK: At the end of the execution, Unity calls OnDisable when there are already non valid objects.
+      // At the end of the execution, Unity calls OnDisable when there are already non valid objects.
       // Calling OnDeinitialize here ensures that objects are still valid and can be used.
       for (int i = 0; i < initializables.Count; ++i)
       {

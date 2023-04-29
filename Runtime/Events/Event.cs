@@ -20,22 +20,16 @@ using FronkonGames.GameWork.Foundation;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Event without parameters.
-  /// </summary>
+  /// <summary> Event without parameters. </summary>
   public class Event : ScriptableEvent
   {
     [SerializeField]
-    private UnityEvent events = new UnityEvent();
+    private UnityEvent events = new();
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public override void Raise() => events.Invoke();
 
-    /// <summary>
-    /// Subscribes call to the event.
-    /// </summary>
+    /// <summary> Subscribes call to the event. </summary>
     /// <param name="call">Action</param>
     public void Subscribe(UnityAction call)
     {
@@ -43,9 +37,7 @@ namespace FronkonGames.GameWork.Core
       events.AddListener(call);
     }
 
-    /// <summary>
-    /// Unsubscribe call to the event.
-    /// </summary>
+    /// <summary> Unsubscribe call to the event. </summary>
     /// <param name="call">Action</param>
     public void Unsubscribe(UnityAction call)
     {
@@ -53,33 +45,23 @@ namespace FronkonGames.GameWork.Core
       events.RemoveListener(call);
     }
 
-    /// <summary>
-    /// Remove all event subscriptions.
-    /// </summary>
+    /// <summary> Remove all event subscriptions. </summary>
     public override void UnsubscribeAll() => events.RemoveAllListeners();
   }
 
-  /// <summary>
-  /// Event with one parameter.
-  /// </summary>
+  /// <summary> Event with one parameter. </summary>
   public class Event<T0> : ScriptableEvent
   {
-    /// <summary>
-    /// First parameter.
-    /// </summary>
+    /// <summary> First parameter. </summary>
     public T0 Value { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0> events = new UnityEvent<T0>();
+    private UnityEvent<T0> events = new();
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public override void Raise() => Raise(Value);
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public void Raise(T0 value)
     {
       Value = value;
@@ -87,9 +69,7 @@ namespace FronkonGames.GameWork.Core
       events.Invoke(value);
     }
 
-    /// <summary>
-    /// Subscribes call to the event.
-    /// </summary>
+    /// <summary> Subscribes call to the event. </summary>
     /// <param name="call">Action</param>
     public void Subscribe(UnityAction<T0> call)
     {
@@ -97,9 +77,7 @@ namespace FronkonGames.GameWork.Core
       events.AddListener(call);
     }
 
-    /// <summary>
-    /// Unsubscribe call to the event.
-    /// </summary>
+    /// <summary> Unsubscribe call to the event. </summary>
     /// <param name="call">Action</param>
     public void Unsubscribe(UnityAction<T0> call)
     {
@@ -107,38 +85,26 @@ namespace FronkonGames.GameWork.Core
       events.RemoveListener(call);
     }
 
-    /// <summary>
-    /// Remove all event subscriptions.
-    /// </summary>
+    /// <summary> Remove all event subscriptions. </summary>
     public override void UnsubscribeAll() => events.RemoveAllListeners();
   }
 
-  /// <summary>
-  /// Event with two parameters.
-  /// </summary>
+  /// <summary> Event with two parameters. </summary>
   public class Event<T0, T1> : ScriptableEvent
   {
-    /// <summary>
-    /// First parameter.
-    /// </summary>
+    /// <summary> First parameter. </summary>
     public T0 Value0 { get; set; }
 
-    /// <summary>
-    /// Second parameter.
-    /// </summary>
+    /// <summary> Second parameter. </summary>
     public T1 Value1 { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0, T1> events = new UnityEvent<T0, T1>();
+    private UnityEvent<T0, T1> events = new();
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public override void Raise() => Raise(Value0, Value1);
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public void Raise(T0 value0, T1 value1)
     {
       Value0 = value0;
@@ -147,9 +113,7 @@ namespace FronkonGames.GameWork.Core
       events.Invoke(value0, value1);
     }
 
-    /// <summary>
-    /// Subscribes call to the event.
-    /// </summary>
+    /// <summary> Subscribes call to the event. </summary>
     /// <param name="call">Action</param>
     public void Subscribe(UnityAction<T0, T1> call)
     {
@@ -157,9 +121,7 @@ namespace FronkonGames.GameWork.Core
       events.AddListener(call);
     }
 
-    /// <summary>
-    /// Unsubscribe call to the event.
-    /// </summary>
+    /// <summary> Unsubscribe call to the event. </summary>
     /// <param name="call">Action</param>
     public void Unsubscribe(UnityAction<T0, T1> call)
     {
@@ -167,43 +129,29 @@ namespace FronkonGames.GameWork.Core
       events.RemoveListener(call);
     }
 
-    /// <summary>
-    /// Remove all event subscriptions.
-    /// </summary>
+    /// <summary> Remove all event subscriptions. </summary>
     public override void UnsubscribeAll() => events.RemoveAllListeners();
   }
 
-  /// <summary>
-  /// Event with three parameters.
-  /// </summary>
+  /// <summary> Event with three parameters. </summary>
   public class Event<T0, T1, T2> : ScriptableEvent
   {
-    /// <summary>
-    /// First parameter.
-    /// </summary>
+    /// <summary> First parameter. </summary>
     public T0 Value0 { get; set; }
 
-    /// <summary>
-    /// Second parameter.
-    /// </summary>
+    /// <summary> Second parameter. </summary>
     public T1 Value1 { get; set; }
 
-    /// <summary>
-    /// Third parameter.
-    /// </summary>
+    /// <summary> Third parameter. </summary>
     public T2 Value2 { get; set; }
 
     [SerializeField]
-    private UnityEvent<T0, T1, T2> events = new UnityEvent<T0, T1, T2>();
+    private UnityEvent<T0, T1, T2> events = new();
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public override void Raise() => Raise(Value0, Value1, Value2);
 
-    /// <summary>
-    /// Invokes the event.
-    /// </summary>
+    /// <summary> Invokes the event. </summary>
     public void Raise(T0 value0, T1 value1, T2 value2)
     {
       Value0 = value0;
@@ -213,9 +161,7 @@ namespace FronkonGames.GameWork.Core
       events.Invoke(value0, value1, value2);
     }
 
-    /// <summary>
-    /// Subscribes call to the event.
-    /// </summary>
+    /// <summary> Subscribes call to the event. </summary>
     /// <param name="call">Action</param>
     public void Subscribe(UnityAction<T0, T1, T2> call)
     {
@@ -223,9 +169,7 @@ namespace FronkonGames.GameWork.Core
       events.AddListener(call);
     }
 
-    /// <summary>
-    /// Unsubscribe call to the event.
-    /// </summary>
+    /// <summary> Unsubscribe call to the event. </summary>
     /// <param name="call">Action</param>
     public void Unsubscribe(UnityAction<T0, T1, T2> call)
     {
@@ -233,9 +177,7 @@ namespace FronkonGames.GameWork.Core
       events.RemoveListener(call);
     }
 
-    /// <summary>
-    /// Remove all event subscriptions.
-    /// </summary>
+    /// <summary> Remove all event subscriptions. </summary>
     public override void UnsubscribeAll() => events.RemoveAllListeners();
   }
 }

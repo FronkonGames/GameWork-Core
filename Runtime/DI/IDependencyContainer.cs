@@ -18,46 +18,32 @@ using System;
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Dependency container interface.
-  /// </summary>
+  /// <summary> Dependency container interface. </summary>
   public interface IDependencyContainer
   {
-    /// <summary>
-    /// The type is registered?
-    /// </summary>
+    /// <summary> The type is registered? </summary>
     /// <param name="type">Type</param>
     /// <returns>true/false</returns>
     bool Contains(Type type);
 
-    /// <summary>
-    /// Return the object, if the type is registered.
-    /// </summary>
+    /// <summary> Return the object, if the type is registered. </summary>
     /// <param name="type">Type</param>
     /// <returns>Object or null</returns>
     object Get(Type type);
 
-    /// <summary>
-    /// Record the types of objects.
-    /// </summary>
+    /// <summary> Record the types of objects. </summary>
     /// <param name="objs">Objects</param>
     void Register(params object[] objs);
 
-    /// <summary>
-    /// Record the type of the object.
-    /// </summary>
+    /// <summary> Record the type of the object. </summary>
     /// <param name="obj">Object</param>
     void Register(object obj);
 
-    /// <summary>
-    /// Remove a type from the register.
-    /// </summary>
+    /// <summary> Remove a type from the register. </summary>
     /// <param name="type">Type</param>
     void Remove(Type type);
 
-    /// <summary>
-    /// Eliminate all types from the register.
-    /// </summary>
+    /// <summary> Eliminate all types from the register. </summary>
     void Clear();
   }
 }

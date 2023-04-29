@@ -17,21 +17,19 @@
 
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Dependencies search modes.
-  /// </summary>
+  /// <summary> Dependencies search modes. </summary>
   public enum SearchIn
   {
     ///<summary>Find dependencies registered in a container (default).</summary>
     Container,
 
-    ///<summary>Find dependencies at the Components. Only available for BaseMonoBehaviour.</summary>
+    ///<summary>Find dependencies at the Components. Only available for CachedMonoBehaviour.</summary>
     Components,
 
-    ///<summary>Find dependencies at the parent. Only available for BaseMonoBehaviour.</summary>
+    ///<summary>Find dependencies at the parent. Only available for CachedMonoBehaviour.</summary>
     Parent,
 
-    ///<summary>Find dependencies at the childrens. Only available for BaseMonoBehaviour.</summary>
+    ///<summary>Find dependencies at the childrens. Only available for CachedMonoBehaviour.</summary>
     Childrens,
   }
 }

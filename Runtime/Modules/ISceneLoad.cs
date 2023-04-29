@@ -16,19 +16,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace FronkonGames.GameWork.Core
 {
-  /// <summary>
-  /// Scene un/loaded.
-  /// </summary>
+  /// <summary> Scene un/loaded. </summary>
   public interface ISceneLoad : IModule
   {
-    /// <summary>
-    /// Scene is loaded.
-    /// </summary>
+    /// <summary> Scene is loaded. </summary>
     void OnSceneLoad(int sceneBuildIndex);
 
-    /// <summary>
-    /// Scene is unloaded.
-    /// </summary>
+    /// <summary> Scene is unloaded. </summary>
     void OnSceneUnload();
   }
 }
