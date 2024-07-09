@@ -21,9 +21,7 @@ using UnityEngine.TestTools;
 using FronkonGames.GameWork.Foundation;
 using FronkonGames.GameWork.Core;
 
-/// <summary>
-/// Injection test.
-/// </summary>
+/// <summary> Injection test. </summary>
 public partial class InjectionTests
 {
   public class ClassA { }

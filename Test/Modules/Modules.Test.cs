@@ -21,9 +21,7 @@ using UnityEngine.Events;
 using UnityEngine.TestTools;
 using FronkonGames.GameWork.Core;
 
-/// <summary>
-/// Modules test.
-/// </summary>
+/// <summary> Modules test. </summary>
 public partial class ModulesTests
 {
   /// <summary>

@@ -21,9 +21,7 @@ using UnityEngine.Events;
 using UnityEngine.TestTools;
 using FronkonGames.GameWork.Core;
 
-/// <summary>
-/// Async test.
-/// </summary>
+/// <summary> Async test. </summary>
 public partial class AsyncTests
 {
   /// <summary>
